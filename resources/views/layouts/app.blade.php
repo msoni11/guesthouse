@@ -126,7 +126,7 @@
     </nav>
     @yield('content')
     <div style="height:50px"></div>
-    <footer class="">
+<!--     <footer class="">
       <div class="primary-footer">
        <div class="footer-wrap"></div>
         <div class="copyright-wrap">
@@ -138,6 +138,6 @@
           </div>
         </div>
       </div>
-    </footer> 
+    </footer>  -->
 </body>
 </html>

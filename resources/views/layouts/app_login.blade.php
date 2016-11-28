@@ -59,10 +59,10 @@
 
     @yield('content')
     <div style="height:50px"></div>
-    <footer class="">
+<!--     <footer class="">
         <div class="primary-footer">
             <div class="footer-wrap" align="center"><p> &copy; {{ date('Y') }} <a href="#">Hindustan Zinc</a> - Login Panel. All rights reserved | Design & Developed by :<a href="#"> Avanik Jain @ 94601 95941 </a></p></div>
         </div>
-    </footer> 
+    </footer>  -->
 </body>
 </html>
