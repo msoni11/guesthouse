@@ -24,8 +24,9 @@ class UsersController extends Controller
                     $email       = $user['mail'][0];
                     $designation = $user['title'][0];
                     $address    = $user['physicaldeliveryofficename'][0];
+                    $location    = $user['physicaldeliveryofficename'][0];
                     $find_user = DB::table('users')->where('username', '=', $request->username)->get(['id']);
-                    $attributes = array('name'=>$name, 'username'=>$request->username,  'email'=>$email, 'password'=>bcrypt($request->password), 'designation'=>$designation, 'address'=>$address);
+                    $attributes = array('name'=>$name, 'username'=>$request->username,  'email'=>$email, 'password'=>bcrypt($request->password), 'designation'=>$designation, 'address'=>$address, 'location' => $location);
                     //dd($find_user[0]->id);
                     if($find_user) {
                          $db_user = \GuestHouse\User::find($find_user[0]->id);
