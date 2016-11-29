@@ -104,10 +104,14 @@ class BookingRequestController extends Controller
    public function create(request $request)
    {
       $users = \GuestHouse\User::lists('name', 'id');
+      $user = new \GuestHouse\User;
       $hods = DB::table('users')
-        ->where('location', Auth::user()->location)
-        ->where('id', '!=', Auth::user()->id)
-        ->lists('name', 'id');
+        ->join('role_users', 'role_users.user_id', '=', 'users.id')
+        ->join('roles', 'role_users.role_id', '=', 'role_users.role_id')
+        ->where('users.location', Auth::user()->location)
+        ->where('users.id', '!=', Auth::user()->id)
+        ->where('roles.name', '=', 'hod')
+        ->lists('users.name', 'users.id');
       return view('booking_request.create', compact('users'), compact('hods'));
    }
    /**
