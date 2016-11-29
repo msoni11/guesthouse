@@ -17,8 +17,8 @@
     <link href="{{ url('/css/bootstrap-datetimepicker.min.css') }}" rel="stylesheet">
     <link href="{{ url('/css/custom.css') }}" rel="stylesheet"> <!-- This should be included  as last css --> 
     
-    <OBJECT ID="GrFingerX" CLASSID="CLSID:71944DD6-B5D2-4558-AD02-0435CB2B39DF"></OBJECT>   
-    
+<!--     <OBJECT ID="GrFingerX" CLASSID="CLSID:71944DD6-B5D2-4558-AD02-0435CB2B39DF"></OBJECT>   
+ -->    
     {{-- <link href="{{ elixir('css/app.css') }}" rel="stylesheet"> --}}
             <!-- JavaScripts -->
     <script src="{{ url('/js/jquery.min.js') }}"></script>

@@ -131,7 +131,7 @@ class FoodBookingController extends Controller
                 \GuestHouse\food_booking_guest_info::create($food_booking_req_guest_info);
             }
         }
-       $this->SendBookingEmail(1, $res->id);
+       //$this->SendBookingEmail(1, $res->id);
        Flash::message('Booking Submited successfully!');
        return redirect('food_booking');
    }

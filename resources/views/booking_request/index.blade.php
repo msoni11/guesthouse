@@ -44,6 +44,7 @@
                      <th>Purpose</th>
                      <th>Remark</th>
                      <th>Requested By</th>
+                     <th>HOD</th>
                      <th>Status</th>
                      <th colspan="4">Actions</th>
                  </tr>
@@ -68,10 +69,29 @@
                          <td>{{ $book->purpose }}</td>
                          <td>{{ $book->remark }}</td>
                          <td>{{ $book->user_name }}</td>
-                         <td> {{ $book->status==2?'Pending':'' }} {{ $book->status==1?'Accepted':'' }} {{ $book->status==0?'Rejected':'' }} </td>
+                         <td>{{ $book->hod_name }}</td>
+                         <td> {{ $book->status==3?'Pending from HOD':'' }} {{ $book->status==2?'Pending from Guest owner':'' }} {{ $book->status==1?'Accepted':'' }} {{ $book->status==0?'Rejected':'' }} </td>
                          <td><a href="{{url('booking_request',$book->id)}}" class="btn btn-primary">Details</a></td>
+                         @if(in_array('admin',$search_form_data_arr['check_role'])|| 
+                         in_array('hod',$search_form_data_arr['check_role']))
+                            @if($book->status==3)
+                            <td>
+                                {!! Form::model($booking_request,['method' => 'PATCH','route'=>['booking_request.update',$book->id]]) !!}
+                                <button class="btn btn-primary">Accept</button>
+                                {!! Form::hidden('status',2,null,['class'=>'form-control']) !!}
+                                {!! Form::close() !!} 
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Or
+                                {!! Form::model($booking_request,['method' => 'PATCH','route'=>['booking_request.update',$book->id]]) !!}
+                                <button class="btn btn-primary">Reject</button>
+                                {!! Form::hidden('status',0,null,['class'=>'form-control']) !!}
+                                {!! Form::close() !!}
+                            </td>
+                            @endif
+                         @endif
+                         
                          @if(in_array('admin',$search_form_data_arr['check_role'])|| in_array('owner',$search_form_data_arr['check_role']))                         
-                          @if($book->status==2)
+
+                            @if($book->status==2)
                             <td>
                                 {!! Form::model($booking_request,['method' => 'PATCH','route'=>['booking_request.update',$book->id]]) !!}
                                 <button class="btn btn-primary">Accept</button>

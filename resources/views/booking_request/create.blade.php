@@ -17,19 +17,20 @@
                 {!! Form::open(['url' => 'booking_request', 'files'=>true]) !!}
                 <div class="form-group form-inline">
                     <div class="row">
-                    <div class="col-md-4">   
-                    {!! Form::label('No. of visitors', 'No. of visitors:') !!}
-                    {!! Form::select('no_of_visitors',[''=>'Select', 1=>1,2=>2,3=>3,4=>4,5=>5,6=>6,7=>7,8=>8,9=>9,10=>10],null,['class'=>'form-control', 'ng-model'=>'no_of_visitors', 'ng-change'=>'changeVisitors()', 'ng-init'=>'init($request->no_of_visitors)']) !!}                   
-                  </div>
-                 <div class="col-md-4">       
-                    {!! Form::label('No. of rooms required', 'No. of rooms required:') !!}
-                    {!! Form::text('required_room',null,['class'=>'form-control']) !!}
-                </div>
-                    <div class="col-md-4"> 
-                    {!! Form::label('Type of Guest', 'Type of Guest:') !!}
-                    {!! Form::select('type_of_guest',['visitor'=>'Visitor', 'employee'=>'Employee', 'contractor'=>'Contractor'],null,['class'=>'form-control']) !!}
+                        <div class="col-md-4">   
+                        {!! Form::label('No. of visitors', 'No. of visitors:') !!}
+                        {!! Form::select('no_of_visitors',[''=>'Select', 1=>1,2=>2,3=>3,4=>4,5=>5,6=>6,7=>7,8=>8,9=>9,10=>10],null,['class'=>'form-control', 'ng-model'=>'no_of_visitors', 'ng-change'=>'changeVisitors()']) !!}                   
+                      </div>
+                      <div class="col-md-4">       
+                        {!! Form::label('No. of rooms required', 'No. of rooms required:') !!}
+                        {!! Form::text('required_room',null,['class'=>'form-control']) !!}
+                      </div>
+                      <div class="col-md-4"> 
+                        {!! Form::label('Type of Guest', 'Type of Guest:') !!}
+                        {!! Form::select('type_of_guest',['visitor'=>'Visitor', 'employee'=>'Employee', 'contractor'=>'Contractor'],null,['class'=>'form-control']) !!}
+                        {!! Form::text('ponumber',null,['class'=>'form-control']) !!}
+                      </div>
                     </div>
-                </div>
                 </div>    
                 <div class="form-group form-inline">
                     <div class="row">
@@ -74,7 +75,7 @@
                     {!! Form::hidden('request_by',  Auth::user()->id, null, ['class'=>'form-control']) !!}
                 </div>
                 <div class="form-group">
-                    {!! Form::hidden('status',2,null,['class'=>'form-control']) !!}
+                    {!! Form::hidden('status',3,null,['class'=>'form-control']) !!}
                 </div>
                 <div ng-repeat="n in [] | range:no_of_visitors">
                      <hr>  
@@ -99,6 +100,14 @@
                     </div>
                      
                 </div>    
+                <div class="form-group form-inline">
+                    <div class="row">
+                      <div class="col-md-4"> 
+                        {!! Form::label('HOD', 'HOD:') !!}
+                        {!! Form::select('hod_id', $hods, null, ['class'=>'form-control']) !!}
+                      </div>
+                    </div>
+                </div>
                 
                  <div class="form-group">
                  <div class="row">
