@@ -157,9 +157,9 @@ class BookingRequestController extends Controller
                 \GuestHouse\booking_request_guest_info::create($booking_req_guest_info);
             }
         }
-       //$this->SendBookingEmail(1, $res->id);
+       $this->SendBookingEmail($res->hod_id, $res->id, 2); // This email should go to HOD.
        Flash::message('Booking Submited successfully!');
-        return redirect('booking_request');
+       return redirect('booking_request');
    }
    /**
     * Display the specified resource.
@@ -251,13 +251,37 @@ class BookingRequestController extends Controller
    }//function
    //-------------------------------------------------------------------------------------------------------------------------------
    
-      /**
+    /**
     * Update the accept/reject in the table.
     *
     * @param  int  $id
     * @return Response
     */
-   public function UpdateStatus(Request $request, $id)
+   public function UpdateStatusByHOD(Request $request, $id)
+   {   
+      $update_booking_request = array('email_key'=>'', 'status'=>$request->status);
+      $booking_request = \GuestHouse\booking_request::find($id);
+      if(isset($booking_request->email_key) && $booking_request->email_key == $request->val) {
+        $booking_request->update($update_booking_request);
+        Flash::message('Booking Rejected');
+        if($request->status == 2) {
+            Flash::message('Booking Acceped');
+        }
+      } else {
+          Flash::error('Error Occured');
+          return redirect('booking_request');
+      }
+      $this->SendConfirmationToOwner($id);
+      return redirect('booking_request');
+   }
+
+    /**
+    * Update the accept/reject in the table.
+    *
+    * @param  int  $id
+    * @return Response
+    */
+   public function UpdateStatusByOwner(Request $request, $id)
    {        
       $update_booking_request = array('email_key'=>'', 'status'=>$request->status);
       $booking_request = \GuestHouse\booking_request::find($id);
@@ -297,16 +321,40 @@ class BookingRequestController extends Controller
      * @param  int  $id
      * @return Response
      */
-    public function SendBookingEmail($user_id, $id)
+    public function SendConfirmationToOwner($id)
     {
-        $user = User::findOrFail($user_id);
-        $owner = User::findOrFail(2);
+        //$user = User::findOrFail($user_id);
+        $owner = User::findOrFail(17);
         $users = \GuestHouse\booking_request::find($id)->user->first();
         $booking_request = \GuestHouse\booking_request::find($id);
         $guest_info =  \GuestHouse\booking_request::find($id)->guest_info()->get();
-        $links = ['accept'=>url('/booking_request/updatestatus/'.$id.'?val='.$booking_request->email_key.'&status=1'),'reject'=>url('/booking_request/updatestatus/'.$id.'?val='.$booking_request->email_key.'&status=0')];
+        $links = ['accept'=>url('/booking_request/updatebyowner/'.$id.'?val='.$booking_request->email_key.'&status=1'),'reject'=>url('/booking_request/updatebyowner/'.$id.'?val='.$booking_request->email_key.'&status=0')];
         
-        $emails = [$user->email, $owner->email, 'test1@gmail.com', 'test2@gmail.com'];
+        $emails = [$owner->email];
+        $mail = Mail::send('emails.booking_request', ['users'=> $users, 'booking_request'=> $booking_request, 'guest_info'=>$guest_info, 'links'=>$links], function ($m) use ($emails) {
+            $m->from('support@hzl.com', 'GHMS Team');
+            $m->to($emails)->subject('New Booking Request');
+        });
+    }
+
+
+    /**
+     * Send an e-mail reminder to the user.
+     *
+     * @param  Request  $request
+     * @param  int  $id
+     * @return Response
+     */
+    public function SendBookingEmail($user_id, $id)
+    {
+        //$user = User::findOrFail($user_id);
+        $owner = User::findOrFail($user_id);
+        $users = \GuestHouse\booking_request::find($id)->user->first();
+        $booking_request = \GuestHouse\booking_request::find($id);
+        $guest_info =  \GuestHouse\booking_request::find($id)->guest_info()->get();
+        $links = ['accept'=>url('/booking_request/updatestatus/'.$id.'?val='.$booking_request->email_key.'&status=2'),'reject'=>url('/booking_request/updatestatus/'.$id.'?val='.$booking_request->email_key.'&status=0')];
+        
+        $emails = [$owner->email];
         $mail = Mail::send('emails.booking_request', ['users'=> $users, 'booking_request'=> $booking_request, 'guest_info'=>$guest_info, 'links'=>$links], function ($m) use ($emails) {
             $m->from('support@hzl.com', 'GHMS Team');
             $m->to($emails)->subject('New Booking Request');
