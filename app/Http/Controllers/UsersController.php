@@ -82,7 +82,8 @@ class UsersController extends Controller
             'name' => 'required|max:255',
             'username' => 'required|max:255|unique:users',
             'email' => 'required|email',
-            'password' => 'required'
+            'password' => 'required',
+            'location' => 'required'
         ]);
         
         $users = $request->all();

@@ -70,6 +70,14 @@
                  <div class="form-group form-inline">
                      <div class="row">
                          <div class="col-md-4">      
+                            {!! Form::label('Location', 'Location:') !!}
+                            {!! Form::text('location',null,['class'=>'form-control']) !!}
+                        </div>
+                     </div>
+                 </div>
+                 <div class="form-group form-inline">
+                     <div class="row">
+                         <div class="col-md-4">      
                             {!! Form::submit('Save', ['class' => 'btn btn-primary form-control']) !!}
                         </div>
                      </div>

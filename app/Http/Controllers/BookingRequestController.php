@@ -128,6 +128,7 @@ class BookingRequestController extends Controller
             'name.*' => 'string',
             'email.*' => 'email',
             'contact_no.*' => 'digits_between:9,12',
+            'hod_id' => 'required'
         ]);
         $req = $request->all();
         $req['email_key'] = str_random(30);
@@ -242,7 +243,7 @@ class BookingRequestController extends Controller
         }      
       }
       Flash::message('Booking Rejected');
-        if($request->status == 1) {
+        if($request->status == 1 || $request->status == 2) {
             Flash::message('Booking Acceped');
         }
       $this->SendConfirmationEmail($id);
@@ -376,7 +377,7 @@ class BookingRequestController extends Controller
         $user = \GuestHouse\User::findOrFail($booking_request->request_by);
         $guest_info = \GuestHouse\booking_request::find($id)->guest_info()->get();
         $status = 'Rejected'; 
-        if($booking_request->status == 1) { 
+        if($booking_request->status == 1 || $booking_request->status == 2) { 
           $status = 'Accepted';
         }
         

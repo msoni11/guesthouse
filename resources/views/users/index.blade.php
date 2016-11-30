@@ -19,6 +19,7 @@
                      <th>Contact No</th>
                      <th>Email</th>
                      <th>Address</th>                     
+                     <th>Location</th>                     
                      <th>Designation</th>
                      <th>Roles</th>
                      <th>Registration Date</th>
@@ -37,6 +38,7 @@
                          <td>{{ $user->contact_no }}</td>
                          <td>{{ $user->email }}</td>
                          <td>{{ $user->address }}</td>
+                         <td>{{ $user->location }}</td>
                          <td>{{ $user->designation }}</td>
                          <td>{{ $user->role }}</td>
                          <td>{{ $user->reg_date }}</td>                         
