@@ -268,8 +268,14 @@ class BookingRequestController extends Controller
         if($request->status == 1 || $request->status == 2) {
             Flash::message('Booking Accepted');
         }
-      $this->SendConfirmationEmail($id);
-        
+
+       if ($request->status == 2) {
+           $this->SendConfirmationToOwner($id);
+       } else {
+           $this->SendConfirmationEmail($id);
+
+       }
+
       return redirect('booking_request');
    }//function
    //-------------------------------------------------------------------------------------------------------------------------------
