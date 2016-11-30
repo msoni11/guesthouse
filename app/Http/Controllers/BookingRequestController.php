@@ -47,7 +47,7 @@ class BookingRequestController extends Controller
        $user = new \GuestHouse\User;
        $search_form_data_arr['check_role'] =  $user->check_role();   
        
-       if(in_array('admin',  $search_form_data_arr['check_role']) || in_array('owner', $search_form_data_arr['check_role']) || in_array('hod', $search_form_data_arr['check_role'])) { // check role
+       if(in_array('admin',  $search_form_data_arr['check_role']) || in_array('owner', $search_form_data_arr['check_role'])) { // check role
             if(isset($request->status) && $request->status != ''){
                  $booking_request = DB::table('booking_requests')
                     ->leftjoin('users', 'users.id', '=', 'booking_requests.request_by')
@@ -66,7 +66,29 @@ class BookingRequestController extends Controller
                     ->orWherebetween('booking_requests.check_out_date', [$from_date, $to_date])
                     ->select(DB::raw('booking_requests.*, users.name as user_name, huser.name as hod_name'))
                     ->paginate(10);
-            } 
+            }
+       } elseif(in_array('hod', $search_form_data_arr['check_role'])) {
+           if(isset($request->status) && $request->status != ''){
+               $booking_request = DB::table('booking_requests')
+                   ->leftjoin('users', 'users.id', '=', 'booking_requests.request_by')
+                   ->leftjoin('users as huser', 'huser.id', '=', 'booking_requests.hod_id')
+                   ->Where('booking_requests.status', '=', $request->status)
+                   ->where('booking_requests.hod_id', '=', Auth::user()->id)
+                   ->wherebetween('booking_requests.check_in_date', [$from_date, $to_date])
+//                    ->orwherebetween('booking_requests.check_out_date', [$from_date, $to_date])
+                   ->select(DB::raw('booking_requests.*, users.name as user_name'))
+                   ->select(DB::raw('users.name as huser_name, huser.name as hod_name'))
+                   ->paginate(10);
+           } else {
+               $booking_request = DB::table('booking_requests')
+                   ->leftjoin('users', 'users.id', '=', 'booking_requests.request_by')
+                   ->leftjoin('users as huser', 'huser.id', '=', 'booking_requests.hod_id')
+                   ->where('booking_requests.hod_id', '=', Auth::user()->id)
+                   ->wherebetween('booking_requests.check_in_date', [$from_date, $to_date])
+//                    ->orWherebetween('booking_requests.check_out_date', [$from_date, $to_date])
+                   ->select(DB::raw('booking_requests.*, users.name as user_name, huser.name as hod_name'))
+                   ->paginate(10);
+           }
        } elseif(Auth::check()) {
              if(isset($request->status) && $request->status != ''){
                  $booking_request = DB::table('booking_requests')
