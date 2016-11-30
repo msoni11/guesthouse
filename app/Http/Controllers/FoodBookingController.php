@@ -191,7 +191,7 @@ class FoodBookingController extends Controller
       
       //Flash::message('Booking Rejected');
       if($request->status == 1) {
-         Flash::message('Booking Acceped');
+         Flash::message('Booking Accepted');
        }else if($request->status == 0){
          Flash::message('Booking Rejected');
        }
@@ -233,7 +233,7 @@ class FoodBookingController extends Controller
         $food_booking->update($update_food_booking_request);
         Flash::message('Booking Rejected');
         if($request->status == 1) {
-            Flash::message('Booking Acceped');
+            Flash::message('Booking Accepted');
         }
       } else {
           Flash::error('Error Occured');

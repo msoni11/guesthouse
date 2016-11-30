@@ -244,7 +244,7 @@ class BookingRequestController extends Controller
       }
       Flash::message('Booking Rejected');
         if($request->status == 1 || $request->status == 2) {
-            Flash::message('Booking Acceped');
+            Flash::message('Booking Accepted');
         }
       $this->SendConfirmationEmail($id);
         
@@ -266,7 +266,7 @@ class BookingRequestController extends Controller
         $booking_request->update($update_booking_request);
         Flash::message('Booking Rejected');
         if($request->status == 2) {
-            Flash::message('Booking Acceped');
+            Flash::message('Booking Accepted');
         }
       } else {
           Flash::error('Error Occured');
@@ -291,7 +291,7 @@ class BookingRequestController extends Controller
         $booking_request->update($update_booking_request);
         Flash::message('Booking Rejected');
         if($request->status == 1) {
-            Flash::message('Booking Acceped');
+            Flash::message('Booking Accepted');
         }
       } else {
           Flash::error('Error Occured');
