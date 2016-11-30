@@ -347,7 +347,12 @@ class BookingRequestController extends Controller
     public function SendConfirmationToOwner($id)
     {
         //$user = User::findOrFail($user_id);
-        $owner = User::findOrFail(17);
+        $owner = DB::table('users')
+              ->leftjoin('role_users', 'users.id', '=', 'role_users.user_id')
+              ->leftjoin('roles', 'roles.id', '=', 'role_users.role_id')
+              ->where('users.location', '=', Auth::user()->location)     
+              ->Where('roles.name', '=', 'owner')
+              ->select(DB::raw('users.*'))->first();
         $users = \GuestHouse\booking_request::find($id)->user->first();
         $booking_request = \GuestHouse\booking_request::find($id);
         $guest_info =  \GuestHouse\booking_request::find($id)->guest_info()->get();
