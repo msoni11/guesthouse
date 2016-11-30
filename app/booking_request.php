@@ -8,7 +8,7 @@ class booking_request extends Model
 {
     //
     protected $fillable = [
-        'no_of_visitors', 'required_room', 'type_of_guest', 'check_in_date', 'check_out_date', 'food_order', 'org_name_address', 'purpose', 'remark', 'request_by', 'status', 'email_key', 'hod_id'];
+        'no_of_visitors', 'required_room', 'type_of_guest', 'check_in_date', 'check_out_date', 'food_order', 'org_name_address', 'purpose', 'remark', 'request_by', 'status', 'email_key', 'hod_id', 'po_no'];
     
     /**
      * The attributes that should be casted to native types.

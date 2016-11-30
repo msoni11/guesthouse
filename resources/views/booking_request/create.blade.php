@@ -27,8 +27,8 @@
                       </div>
                       <div class="col-md-4"> 
                         {!! Form::label('Type of Guest', 'Type of Guest:') !!}
-                        {!! Form::select('type_of_guest',['visitor'=>'Visitor', 'employee'=>'Employee', 'contractor'=>'Contractor'],null,['class'=>'form-control']) !!}
-                        {!! Form::text('ponumber',null,['class'=>'form-control']) !!}
+                        {!! Form::select('type_of_guest',['visitor'=>'Visitor', 'employee'=>'Employee', 'contractor'=>'Contractor'],null,['class'=>'form-control', 'ng-model'=>'type_of_guest', 'ng-init'=>"type_of_guest == 'visitor'" ]) !!}
+                        {!! Form::text('po_no',null,['class'=>'form-control ng-hide', 'ng-show' => "type_of_guest == 'contractor'"]) !!}
                       </div>
                     </div>
                 </div>    
