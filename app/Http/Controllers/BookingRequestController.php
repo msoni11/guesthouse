@@ -107,7 +107,7 @@ class BookingRequestController extends Controller
       $user = new \GuestHouse\User;
       $hods = DB::table('users')
         ->join('role_users', 'role_users.user_id', '=', 'users.id')
-        ->join('roles', 'role_users.role_id', '=', 'role_users.role_id')
+        ->join('roles', 'role_users.role_id', '=', 'roles.id')
         ->where('users.location', Auth::user()->location)
         ->where('users.id', '!=', Auth::user()->id)
         ->where('roles.name', '=', 'hod')
