@@ -43,8 +43,13 @@ class UsersController extends Controller
       
         if(Auth::attempt(['username'=>$request->username, 'password'=>$request->password]))
         {
-              Session::put('userData', $request->username); 
-              return Redirect('/booking_request')->with('message', 'Login Success');
+            Session::put('userData', $request->username);
+            $user = new \GuestHouse\User;
+            if(in_array('receptionist', $user->check_role())) {
+                return redirect('/guest_info/pending');
+            } else {
+                return Redirect('/booking_request')->with('message', 'Login Success');
+            }
         }
         $error = 'Invalid user name or password';
         return view('auth.login', compact('error'));

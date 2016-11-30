@@ -81,7 +81,7 @@
                             </ul>
                         </li>
                         @endif
-                        @if(Auth::user()->hasRole(['owner', 'admin']))
+                        @if(Auth::user()->hasRole(['owner', 'admin', 'receptionist']))
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
                                 Stay <span class="caret"></span>
@@ -100,13 +100,18 @@
                                 <li><a href="{{ url('/guest_info/foodpending') }}">Food</a></li>
                             </ul>
                         </li>
-                        
+                        @endif
+
+                        @if(Auth::user()->hasRole(['owner', 'admin']))
                         <li><a href="{{ url('/room') }}">All Rooms</a></li>
                         <li><a href="{{ url('/food') }}">Add Food</a></li>
                         
                         @endif
+
+                        @if(!Auth::user()->hasRole('receptionist'))
                         <li><a href="{{ url('/booking_request') }}">Book Guest House</a></li>          
-                        <li><a href="{{ url('/food_booking') }}">Food Order</a></li>          
+                        <li><a href="{{ url('/food_booking') }}">Food Order</a></li>
+                        @endif
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
                                 {{ Auth::user()->name }} <span class="caret"></span>
