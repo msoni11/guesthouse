@@ -56,19 +56,23 @@ class GuestInfoController extends Controller
             if((isset($request->to_date))||(isset($request->from_date))||(isset($request->status))) {
                  $guest_info = DB::table('guest_infos')
                     ->join('booking_request_guest_infos', 'guest_infos.id', '=', 'booking_request_guest_infos.guest_info_id')
+                    ->join('booking_requests', 'booking_requests.id', '=', 'booking_request_guest_infos.booking_request_id')
                     ->leftjoin('guest_room_allotments', 'guest_room_allotments.guest_info_id','=','guest_infos.id')
                     ->leftjoin('rooms', 'guest_room_allotments.room_id','=','rooms.id')
                     ->where('guest_room_allotments.check_in_date','>',$from_date)
                     ->where('guest_room_allotments.check_in_date','<',$to_date)
-                    ->where('guest_room_allotments.checked_in','=',$request->status)      
+                    ->where('guest_room_allotments.checked_in','=',$request->status)
+                    ->where('booking_requests.status', '=', '1')
                     ->select(DB::raw('guest_infos.*,guest_room_allotments.checked_in, guest_room_allotments.check_in_date, guest_room_allotments.check_out_date, guest_room_allotments.id as guest_room_allotment_id, guest_room_allotments.checked_in, rooms.room_no, rooms.id as room_id'))
                     ->orderby('guest_room_allotments.id', 'desc')
                     ->paginate(20);
             } else {
                 $guest_info = DB::table('guest_infos')
-                   ->join('booking_request_guest_infos', 'guest_infos.id', '=', 'booking_request_guest_infos.guest_info_id')     
+                   ->join('booking_request_guest_infos', 'guest_infos.id', '=', 'booking_request_guest_infos.guest_info_id')
+                    ->join('booking_requests', 'booking_requests.id', '=', 'booking_request_guest_infos.booking_request_id')
                     ->leftjoin('guest_room_allotments', 'guest_room_allotments.guest_info_id','=','guest_infos.id')
                     ->leftjoin('rooms', 'guest_room_allotments.room_id','=','rooms.id')
+                    ->where('booking_requests.status', '=', '1')
                     ->select(DB::raw('guest_infos.*,guest_room_allotments.checked_in, guest_room_allotments.check_in_date, guest_room_allotments.check_out_date, guest_room_allotments.id as guest_room_allotment_id, guest_room_allotments.checked_in, rooms.room_no, rooms.id as room_id')) 
                     ->orderby('guest_room_allotments.id', 'desc')
                     ->paginate(20);
