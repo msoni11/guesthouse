@@ -169,9 +169,9 @@ class GuestRoomAllotmentController extends Controller
         $boking_request = DB::table('booking_request_guest_infos')->where('guest_info_id', '=', $guest_room_allotment->guest_info_id)->first();
         //dd($boking_request->booking_request_id);
         $owner = \GuestHouse\User::findOrFail(2);
-        dd($boking_request->booking_request_id);
-        $users = \GuestHouse\booking_request::find($boking_request->booking_request_id)->user->first();
-        $booking_request = \GuestHouse\booking_request::find($boking_request->id);
+        //dd($boking_request->booking_request_id);
+        $users = \GuestHouse\booking_request::find($boking_request->booking_request_id)->user()->first();
+        $booking_request = \GuestHouse\booking_request::find($boking_request->booking_request_id);
        
         $guestroomallotment = DB::table('guest_room_allotments')
                ->join('guest_infos', 'guest_room_allotments.guest_info_id', '=', 'guest_infos.id')
@@ -190,7 +190,7 @@ class GuestRoomAllotmentController extends Controller
        //dd($boking_request->id);
         $links = ['accept'=>url('/booking_request/updatestatus/'.$guest_room_allotment_id.'?val='.$booking_request->email_key.'&status=1'),'reject'=>url('/booking_request/updatestatus/'.$guest_room_allotment_id.'?val='.$booking_request->email_key.'&status=0')];
         
-        $emails = [$users->email, $owner->email, 'test1@gmail.com', 'test2@gmail.com'];
+        $emails = [$users->email, $owner->email];
         $guestroomallotment = $guestroomallotment[0];
         $mail = Mail::send('emails.final_bill', ['users'=> $users, 'booking_request'=> $booking_request, 'foods'=> $foods, 'guestroomallotment'=>$guestroomallotment, 'links'=>$links], function ($m) use ($emails) {
             $m->from('support@hzl.com', 'GHMS Team');
