@@ -30,7 +30,7 @@ class GrFingerService
     // Application finalization code
     public function finalize()
     {
-        sqlite_close ($this->db);
+        mysqli_close($this->db);
         $this->GrFingerX->Finalize();
     }
     
@@ -39,7 +39,7 @@ class GrFingerService
     {
         // Insert the template into database
 
-        if ($this->db->query("UPDATE guest_infos SET finger_print+'".$tpt."' WHERE id=".$id)) {
+        if ($this->db->query("UPDATE guest_infos SET finger_print='".$tpt."' WHERE id=".$id)) {
             return $id;
         } else {
             return false;
@@ -51,10 +51,10 @@ class GrFingerService
     {       
         // Find and encode the database template to base 64
         $query = $this->db->query("SELECT * FROM guest_infos WHERE id=".$id);
-        $row = mysqli_fetch_array($query,MYSQLI_ASSOC);        
+        $row = mysqli_fetch_array($query, MYSQLI_ASSOC);        
         $score = 0;
         // Comparing the given template and the encoded one
-        $ret = $this->GrFingerX->VerifyBase64($rcvtpt,$row["tpt"],$score,$this->GR_DEFAULT_CONTEXT);
+        $ret = $this->GrFingerX->VerifyBase64($rcvtpt,$row["finger_print"],$score,$this->GR_DEFAULT_CONTEXT);
         if($ret == $this->GR_MATCH)
             return $row["id"];
         else
@@ -69,12 +69,12 @@ class GrFingerService
         if($ret!=$this->GR_OK)
             return $ret;
         // Getting enrolled templates from database
-        $query = sqlite_query($this->db, "SELECT * FROM enroll");       
+        $query = $this->db->query("SELECT * FROM enroll");       
         $score = 0;
-        while ($row = sqlite_fetch_array($query, SQLITE_ASSOC))
+        while ($row = mysqli_fetch_array($query, MYSQLI_ASSOC))
         {           
             // Comparing the current template and the given one
-            $ret = $this->GrFingerX->IdentifyBase64($row["tpt"],$score,$this->GR_DEFAULT_CONTEXT);
+            $ret = $this->GrFingerX->IdentifyBase64($row["finger_print"],$score,$this->GR_DEFAULT_CONTEXT);
             if( $ret == $this->GR_MATCH)
                 return $row["id"];              
         }
