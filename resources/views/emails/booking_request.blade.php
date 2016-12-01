@@ -39,7 +39,7 @@
             <td width="50%">Request By</td><td width="50%">{{$users->name}}</td>
         </tr>
         <tr border="1">
-            <td width="50%">Status</td><td width="50%">{{ $booking_request->status==2?'Pending':'' }} {{ $booking_request->status==1?'Accept':'' }} {{ $booking_request->status==0?'Reject':'' }}</td>
+            <td width="50%">Status</td><td width="50%">{{ $booking_request->status==3?'Pending from HOD':'' }}{{ $booking_request->status==2?'Pending from owner':'' }} {{ $booking_request->status==1?'Accept':'' }} {{ $booking_request->status==0?'Reject':'' }}</td>
         </tr>
     </table>
     <p></p>
