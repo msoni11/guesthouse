@@ -37,7 +37,8 @@
                         <thead>
                  <tr >
                      <th>Id</th>
-                     <th>Name</th>
+                     <th>Guest Name</th>
+                     <th>Guest Id</th>
                      <th>Contact No</th>
                      <th>Email</th>
                      <th>Address</th>                     
@@ -56,6 +57,7 @@
                      <tr>
                          <td>{{ $index ++ }}</td>
                          <td>{{ $guest->name }}</td>
+                         <td>{{ $guest->id }}</td>
                          <td>{{ $guest->contact_no }}</td>
                          <td>{{ $guest->email }}</td>
                          <td>{{ $guest->address }}</td>
@@ -74,9 +76,11 @@
                          
                         <td>
                             @if($guest->finger_print)
-                             {{ $guest->finger_print }}
+                                <span aria-hidden="true" class="glyphicon glyphicon-ok"></span>
+                            @else
+                                <span aria-hidden="true" class="glyphicon glyphicon-remove"></span>
                              @endif
-                        </td> 
+                        </td>
                          
                          <td>
                              @if($guest->room_no ) 

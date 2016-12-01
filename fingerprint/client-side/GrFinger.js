@@ -173,6 +173,11 @@ function CallIdentify(rawImg, w, h, res){
 				res - Image resolution in DPI
 */
 function CallEnroll(rawImg, w, h, res){
+	var guest_id = document.getElementById('guest_id').value;
+	if (!guest_id) {
+		alert("Please enter the Guest Id");
+		return;
+	}
 	if(i == 0){
 		result = GrFingerX.StartEnroll(GrFingerX.GR_DEFAULT_CONTEXT);	//Starts the Enrollment process
 		document.getElementById('log').value = document.getElementById('log').value + "StartEnroll\n";
@@ -222,7 +227,7 @@ function CallEnroll(rawImg, w, h, res){
 	if(saveConsolidatedTemplate)
 	{
 		i = -1;
-		post(retObj.tpt,0,1);
+		post(retObj.tpt,guest_id,1);
 	}
 	i++;
 }
