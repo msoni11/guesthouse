@@ -61,7 +61,7 @@
                                 <span class="file-custom"></span>
                         </label>
                     </div>
-                    <div class="col-md-4"> 
+                    <!--<div class="col-md-4">
                          @if($guest_info->finger_print)
                     <a target='_blank' href="{{ url('uploads/'.$guest_info->finger_print) }}" >[View Finger Print]</a>    
                       @endif 
@@ -73,7 +73,7 @@
                                 {!! Form::hidden('finger_print',$rand, ['class'=>'form-control', 'id'=>'finger_print_id']) !!}
                                  <span class="file-custom"></span>
                         </label>
-                    </div>
+                    </div>-->
                    </div> 
                 </div>
                 <div class="form-group form-inline">

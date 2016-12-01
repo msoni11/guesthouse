@@ -340,9 +340,9 @@ class GuestInfoController extends Controller
    {
        
        if(!isset($request->served)){
-      $this->validate($request, [
-            'finger_print' => 'required|unique:guest_infos|max:255',
-        ]);  
+//      $this->validate($request, [
+//            'finger_print' => 'required|unique:guest_infos|max:255',
+//        ]);  
        }
        
       $update_guest_info = $request->all();
