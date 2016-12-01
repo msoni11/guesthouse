@@ -69,7 +69,7 @@ class GrFingerService
         if($ret!=$this->GR_OK)
             return $ret;
         // Getting enrolled templates from database
-        $query = $this->db->query("SELECT * FROM enroll");       
+        $query = $this->db->query("SELECT * FROM guest_infos");
         $score = 0;
         while ($row = mysqli_fetch_array($query, MYSQLI_ASSOC))
         {           
