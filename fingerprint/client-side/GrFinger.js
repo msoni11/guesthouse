@@ -48,7 +48,7 @@ function post_identify(Objpost){
 			document.getElementById('log').scrollTop = document.getElementById('log').scrollHeight;
 		}
 		else if(Objpost.ret == 1){
-			document.getElementById('log').value = document.getElementById('log').value + "Identified with id = " + Objpost.id + "\n";
+			document.getElementById('log').value = document.getElementById('log').value + "Identified with Guest id = " + Objpost.id + "\n";
 			document.getElementById('log').scrollTop = document.getElementById('log').scrollHeight;
 		}
 		else{
