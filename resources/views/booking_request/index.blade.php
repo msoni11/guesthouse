@@ -137,9 +137,11 @@
                 <script>
                     $(document).ready(function() {             
                      $('#from_date').datetimepicker({
+                            sideBySide: true,
                             format: "YYYY/MM/DD",
                       });
                      $('#to_date').datetimepicker({
+                            sideBySide: true,
                             format: "YYYY/MM/DD",
                       });
                     });

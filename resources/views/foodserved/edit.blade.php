@@ -32,6 +32,7 @@
         <script language="JavaScript">
 		jQuery(document).ready(function($){
                     $('#check_in_date').datetimepicker({
+                          sideBySide: true,
                          format: "YYYY/MM/DD hh:mm:ss",
                     });
                 });
