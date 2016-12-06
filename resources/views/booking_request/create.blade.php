@@ -103,7 +103,7 @@
                 <div class="form-group form-inline">
                     <div class="row">
                       <div class="col-md-4"> 
-                        {!! Form::label('HOD', 'HOD:') !!}
+                        {!! Form::label('HOD', 'Approval:') !!}
                         {!! Form::select('hod_id', $hods, null, ['class'=>'form-control']) !!}
                       </div>
                     </div>
