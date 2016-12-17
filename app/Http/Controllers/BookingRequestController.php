@@ -101,14 +101,23 @@ class BookingRequestController extends Controller
     */
    public function store(Request $request)
    {
+       //dd($request);die;
        $this->validate($request, [
             'no_of_visitors' => 'required',
             'check_in_date' => 'required|after:tomorrow',
             'check_out_date' => 'required|after:check_in_date',
-            'name.*' => 'string',
-            'email.*' => 'email',
-            'contact_no.*' => 'digits_between:9,12',
-            'hod_id' => 'required'
+            'name.*' => 'required',
+            'email.*' => 'required|email',
+            'contact_no.*' => 'required|digits_between:9,12',
+            'hod_id' => 'required',
+            'required_room' => 'required|digits_between:1,30',
+            'type_of_Guest' => 'required',
+            'food_order'    => 'required',
+            'org_name_address'  => 'required',
+            'purpose'       =>  'required|string',
+            'remark'        =>  'required|string',
+            'attachment_document' => 'required|image',
+            'Approval'       =>  'required'
         ]);
         $req = $request->all();
         $req['email_key'] = str_random(30);
