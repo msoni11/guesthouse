@@ -107,7 +107,6 @@ class BookingRequestController extends Controller
             'check_in_date' => 'required|after:tomorrow',
             'check_out_date' => 'required|after:check_in_date',
             'name.*' => 'required',
-            'email.*' => 'required|email',
             'contact_no.*' => 'required|digits_between:9,12',
             'hod_id' => 'required',
             'required_room' => 'required|digits_between:1,30',
