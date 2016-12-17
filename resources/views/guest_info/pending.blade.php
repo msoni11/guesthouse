@@ -106,7 +106,7 @@
                              </button>
                              {!! Form::close() !!}               
                           @else             
-                             @if($guest->doc && $guest->finger_print && $guest->guest_photo)                                       
+                             @if($guest->doc && $guest->guest_photo)
                              <form action="{{ url('/guest_info/updatecheckin') }}" method="GET">           
                              <?php echo method_field('PUT'); ?>
                              <input type="hidden" name="_token" value="{{ csrf_token() }}">  
