@@ -111,6 +111,8 @@ Route::group(['middleware' => ['web']], function () {
     Route::get('/booking_request/updatebyowner/{booking_request}', 'BookingRequestController@UpdateStatusByOwner')->name('UpdateStatusByOwner');
 
     Route::get('/food_bookings/updatestatus/{food_bookings}', 'FoodBookingController@UpdateStatus')->name('UpdateStatus');
+
+    Route::get('/booking_request/pending','BookingRequestController@Pending')->name('pending');
     
     Route::resource('booking_request','BookingRequestController');
     
