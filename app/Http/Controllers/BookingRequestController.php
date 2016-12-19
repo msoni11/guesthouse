@@ -108,15 +108,14 @@ class BookingRequestController extends Controller
             'check_out_date' => 'required|after:check_in_date',
             'name.*' => 'required',
             'contact_no.*' => 'required|digits_between:9,12',
-            'hod_id' => 'required',
-            'required_room' => 'required|digits_between:1,30',
-            'type_of_Guest' => 'required',
+            'required_room' => 'required',
+            'type_of_guest' => 'required',
             'food_order'    => 'required',
             'org_name_address'  => 'required',
             'purpose'       =>  'required|string',
             'remark'        =>  'required|string',
-            'attachment_document' => 'required|image',
-            'Approval'       =>  'required'
+            'document_type' => 'required',
+            'address.*'       => 'required'
         ]);
         $req = $request->all();
         $req['email_key'] = str_random(30);
