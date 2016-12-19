@@ -325,7 +325,7 @@ class BookingRequestController extends Controller
         $emails = [$owner->email];
         $mail = Mail::send('emails.booking_request', ['users'=> $users, 'booking_request'=> $booking_request, 'guest_info'=>$guest_info, 'links'=>$links], function ($m) use ($emails) {
             $m->from('support@hzl.com', 'GHMS Team');
-            $m->to($emails)->subject('New Booking Request');
+            $m->to($emails)->subject('Guesthouse Stay Room Booking');
         });
     }
 
@@ -349,7 +349,7 @@ class BookingRequestController extends Controller
         $emails = [$owner->email];
         $mail = Mail::send('emails.booking_request', ['users'=> $users, 'booking_request'=> $booking_request, 'guest_info'=>$guest_info, 'links'=>$links], function ($m) use ($emails) {
             $m->from('support@hzl.com', 'GHMS Team');
-            $m->to($emails)->subject('New Booking Request');
+            $m->to($emails)->subject('Guesthouse Stay Room Booking');
         });
     }//function
     //---------------------------------------------------------------------------------------------------------------------
@@ -375,7 +375,7 @@ class BookingRequestController extends Controller
         $emails = [$user->email];
         $mail = Mail::send('emails.booking_request_confirm', ['users'=> $users, 'booking_request'=> $booking_request, 'guest_info'=>$guest_info], function ($m) use ($emails, $status) {
             $m->from('support@hzl.com', 'GHMS Team');
-            $m->to($emails)->subject('Guest House Booking Request '. $status);
+            $m->to($emails)->subject('Guesthouse Stay Room Booking '. $status);
         });
     }//function
     //---------------------------------------------------------------------------------------------------------------------
