@@ -85,6 +85,7 @@ class BookingRequestController extends Controller
    {
       $users = \GuestHouse\User::lists('name', 'id');
       $user = new \GuestHouse\User;
+      $curruser = Auth::user();
       $hods = DB::table('users')
         ->join('role_users', 'role_users.user_id', '=', 'users.id')
         ->join('roles', 'role_users.role_id', '=', 'roles.id')
@@ -92,7 +93,7 @@ class BookingRequestController extends Controller
         ->where('users.id', '!=', Auth::user()->id)
         ->where('roles.name', '=', 'hod')
         ->lists('users.name', 'users.id');
-      return view('booking_request.create', compact('users'), compact('hods'));
+      return view('booking_request.create', compact('curruser'), compact('hods'));
    }
    /**
     * Store a newly created resource in storage.
@@ -101,8 +102,8 @@ class BookingRequestController extends Controller
     */
    public function store(Request $request)
    {
-       //dd($request);die;
-       $this->validate($request, [
+       if ($request->get('type_of_guest') !== 'guestof') {
+           $valids = [
                'no_of_visitors' => 'required',
                'check_in_date' => 'required|after:tomorrow',
                'check_out_date' => 'required|after:check_in_date',
@@ -114,9 +115,24 @@ class BookingRequestController extends Controller
                'org_name_address'  => 'required',
                'purpose'       =>  'required|string',
                'remark'        =>  'required|string',
+               'document_type.*' => 'required',
                'doc.*' => 'required',
                'address.*'       => 'required'
-        ]);
+           ];
+       } else {
+           $valids = [
+               'no_of_visitors' => 'required',
+               'check_in_date' => 'required|after:tomorrow',
+               'check_out_date' => 'required|after:check_in_date',
+               'required_room' => 'required',
+               'type_of_guest' => 'required',
+               'food_order'    => 'required',
+               'org_name_address'  => 'required',
+               'purpose'       =>  'required|string',
+               'remark'        =>  'required|string'
+           ];
+       }
+       $this->validate($request, $valids);
         $req = $request->all();
         $req['email_key'] = str_random(30);
         $booking_request =  $req;

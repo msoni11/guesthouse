@@ -36,7 +36,7 @@
 
                           {!! Form::label('Type of Guest', 'Type of Guest:') !!}
                             <span style="color:red">*</span>
-                          {!! Form::select('type_of_guest',[''=>'Select','visitor'=>'Visitor', 'employee'=>'Employee', 'contractor'=>'Contractor'],null,['class'=>'form-control', 'ng-model'=>'type_of_guest', 'ng-init'=>"type_of_guest == 'visitor'" ]) !!}
+                          {!! Form::select('type_of_guest',[''=>'Select','visitor'=>'Visitor', 'employee'=>'Employee', 'contractor'=>'Contractor', 'guestof'=>'Guest of'],null,['class'=>'form-control', 'ng-model'=>'type_of_guest', 'ng-init'=>"type_of_guest == 'visitor'", "ng-change" => "onGuestTypeChange('$curruser->name')" ]) !!}
                           {!! Form::text('po_no',null,['class'=>'form-control ng-hide', 'ng-show' => "type_of_guest == 'contractor'"]) !!}
 
                       </div>
@@ -107,7 +107,7 @@
 
                         {!! Form::label('Guest Name', 'Guest Name:') !!}
                         <span style="color:red">*</span>
-                        {!! Form::text('name[<% $index + 1 %>]',null,['class'=>'form-control']) !!}
+                        {!! Form::text('name[<% $index + 1 %>]',null,['class'=>'form-control', 'ng-model'=>'guestofname']) !!}
 
 
                         {!! Form::label('Guest Contact No', 'Guest Contact No:') !!}
@@ -127,7 +127,7 @@
                     <div class="form-group form-inline">
                         {!! Form::label('Attach Document', 'Attach Document:') !!}
                             <span style="color:red">*</span>
-                            {!! Form::select('document_type[<% $index + 1 %>]', ['Company Employee ID Card'=>'Company Employee ID Card','Voter Photo ID'=>'Voter Photo ID','Driving License'=>'Driving License','Passport'=>'Passport'], null,['class'=>'form-control']) !!}
+                            {!! Form::select('document_type[<% $index + 1 %>]', ['' => 'Select', 'Company Employee ID Card'=>'Company Employee ID Card','Voter Photo ID'=>'Voter Photo ID','Driving License'=>'Driving License','Passport'=>'Passport'], null,['class'=>'form-control']) !!}
                             <label class="file" class="form-control">
                                 <input type="file" name="doc[<% $index + 1 %>]" id="file">
                                 <span class="file-custom"></span>

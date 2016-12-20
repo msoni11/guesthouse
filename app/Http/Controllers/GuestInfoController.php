@@ -63,7 +63,7 @@ class GuestInfoController extends Controller
                     ->where('guest_room_allotments.check_in_date','<',$to_date)
                     ->where('guest_room_allotments.checked_in','=',$request->status)
                     ->where('booking_requests.status', '=', '1')
-                    ->select(DB::raw('guest_infos.*,guest_room_allotments.checked_in, guest_room_allotments.check_in_date, guest_room_allotments.check_out_date, guest_room_allotments.id as guest_room_allotment_id, guest_room_allotments.checked_in, rooms.room_no, rooms.id as room_id'))
+                    ->select(DB::raw('guest_infos.*,guest_room_allotments.checked_in, guest_room_allotments.check_in_date, guest_room_allotments.check_out_date, guest_room_allotments.id as guest_room_allotment_id, guest_room_allotments.checked_in, rooms.room_no, rooms.id as room_id,  booking_requests.type_of_guest'))
                     ->orderby('guest_room_allotments.id', 'desc')
                     ->paginate(20);
             } else {
@@ -73,7 +73,7 @@ class GuestInfoController extends Controller
                     ->leftjoin('guest_room_allotments', 'guest_room_allotments.guest_info_id','=','guest_infos.id')
                     ->leftjoin('rooms', 'guest_room_allotments.room_id','=','rooms.id')
                     ->where('booking_requests.status', '=', '1')
-                    ->select(DB::raw('guest_infos.*,guest_room_allotments.checked_in, guest_room_allotments.check_in_date, guest_room_allotments.check_out_date, guest_room_allotments.id as guest_room_allotment_id, guest_room_allotments.checked_in, rooms.room_no, rooms.id as room_id')) 
+                    ->select(DB::raw('guest_infos.*,guest_room_allotments.checked_in, guest_room_allotments.check_in_date, guest_room_allotments.check_out_date, guest_room_allotments.id as guest_room_allotment_id, guest_room_allotments.checked_in, rooms.room_no, rooms.id as room_id, booking_requests.type_of_guest'))
                     ->orderby('guest_room_allotments.id', 'desc')
                     ->paginate(20);
             }

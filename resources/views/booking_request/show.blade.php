@@ -64,13 +64,13 @@
                 <div class="form-group">
                     <label for="user" class="col-sm-2 control-label">Request By</label>
                     <div class="col-sm-10">
-                        <input type="text" class="form-control" id="publisher" placeholder={{$users->name}} readonly>
+                        <input type="text" class="form-control" id="publisher" placeholder="{{$users->name}}" readonly>
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="status" class="col-sm-2 control-label">Status</label>
                     <div class="col-sm-10">
-                        <input type="text" class="form-control" id="publisher" placeholder={{ $booking_request->status==2?'Pending':'' }} {{ $booking_request->status==1?'Accept':'' }} {{ $booking_request->status==0?'Reject':'' }} readonly>
+                        <input type="text" class="form-control" id="publisher" placeholder="{{ $booking_request->status==2?'Pending':'' }} {{ $booking_request->status==1?'Accept':'' }} {{ $booking_request->status==0?'Reject':'' }}" readonly>
                     </div>
                 </div>
                     {{ $count = '' }}
@@ -79,25 +79,25 @@
                     <div class="form-group form-inline">   
                         <label for="" class="control-label col-sm-2">{{$count = $count + 1}}) Guest Name:</label>
                         <div class="col-sm-2">
-                        <input type="text" class="form-control" id="guest_name" placeholder={{$guest->name}} readonly>
+                        <input type="text" class="form-control" id="guest_name" placeholder="{{$guest->name}}" readonly>
                         </div>
                         <label for="guest contact no" class="control-label col-sm-2">Guest Contact No:</label>
                         <div class="col-sm-2">
-                        <input type="text" class="form-control" id="guest_contact_no" placeholder={{$guest->contact_no}} readonly>
+                        <input type="text" class="form-control" id="guest_contact_no" placeholder="{{$guest->contact_no}}" readonly>
                         </div>
                         <label for="email" class="control-label col-sm-2">Guest Email:</label>
                         <div class="col-sm-2">
-                        <input type="text" class="form-control" id="guest_email" placeholder={{$guest->email}} readonly>
+                        <input type="text" class="form-control" id="guest_email" placeholder="{{$guest->email}}" readonly>
                         </div>
                     </div>   
                     <div class="form-group form-inline">                           
                         <label for="guest address" class="control-label col-sm-2">Guest Address:</label>
                         <div class="col-sm-2">
-                        <input type="text" class="form-control" id="guest_address" placeholder={{$guest->address}} readonly>
+                        <input type="text" class="form-control" id="guest_address" placeholder="{{$guest->address}}" readonly>
                         </div>
                         <label for="Attach Document" class="control-label col-sm-2">Attached Document Type:</label>
                         <div class="col-sm-2">
-                        <input type="text" class="form-control" id="attach document" placeholder={{$guest->document_type}} readonly>
+                        <input type="text" class="form-control" id="attach document" placeholder="{{$guest->document_type}}" readonly>
                         </div>
                         <div class="col-sm-2">
                             @if($guest->doc) 

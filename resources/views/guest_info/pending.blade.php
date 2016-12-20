@@ -105,8 +105,8 @@
                                  Check Out Now
                              </button>
                              {!! Form::close() !!}               
-                          @else             
-                             @if($guest->doc && $guest->guest_photo)
+                          @else
+                             @if(($guest->doc && $guest->guest_photo) || ($guest->type_of_guest == 'guestof'))
                              <form action="{{ url('/guest_info/updatecheckin') }}" method="GET">           
                              <?php echo method_field('PUT'); ?>
                              <input type="hidden" name="_token" value="{{ csrf_token() }}">  
