@@ -37,9 +37,9 @@
                           {!! Form::label('Type of Guest', 'Type of Guest:') !!}
                             <span style="color:red">*</span>
                           {!! Form::select('type_of_guest',[''=>'Select','visitor'=>'Visitor', 'employee'=>'Employee', 'contractor'=>'Contractor'],null,['class'=>'form-control', 'ng-model'=>'type_of_guest', 'ng-init'=>"type_of_guest == 'visitor'" ]) !!}
-                        {!! Form::text('po_no',null,['class'=>'form-control ng-hide', 'ng-show' => "type_of_guest == 'contractor'"]) !!}
+                          {!! Form::text('po_no',null,['class'=>'form-control ng-hide', 'ng-show' => "type_of_guest == 'contractor'"]) !!}
 
-                          </div>
+                      </div>
                     </div>
                 </div>    
                 <div class="form-group form-inline">
@@ -124,9 +124,7 @@
                         {!! Form::text('address[<% $index + 1 %>]',null,['class'=>'form-control']) !!}
 
                     </div>
-                </div>
-
-                        <div class="form-group form-inline">
+                    <div class="form-group form-inline">
                         {!! Form::label('Attach Document', 'Attach Document:') !!}
                             <span style="color:red">*</span>
                             {!! Form::select('document_type[<% $index + 1 %>]', ['Company Employee ID Card'=>'Company Employee ID Card','Voter Photo ID'=>'Voter Photo ID','Driving License'=>'Driving License','Passport'=>'Passport'], null,['class'=>'form-control']) !!}
