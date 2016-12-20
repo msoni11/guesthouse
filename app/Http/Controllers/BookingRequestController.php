@@ -257,7 +257,7 @@ class BookingRequestController extends Controller
 
        }
 
-      return redirect('booking_request/pending');
+      return redirect('booking_request/requests');
    }//function
    //-------------------------------------------------------------------------------------------------------------------------------
    
@@ -408,7 +408,7 @@ class BookingRequestController extends Controller
      *
      * @return Response
      */
-    public function pending(Request $request)
+    public function requests(Request $request)
     {
         $status = '';
         $booking_request = array();
@@ -477,7 +477,7 @@ class BookingRequestController extends Controller
             return  redirect('/login');
         }
 
-        return view('booking_request.pending',compact('booking_request'), compact('search_form_data_arr'));
+        return view('booking_request.requests',compact('booking_request'), compact('search_form_data_arr'));
 
     }
     

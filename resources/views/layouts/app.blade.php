@@ -111,11 +111,11 @@
                         @if(Auth::user()->hasRole(['owner', 'admin', 'hod']))
                             <li class="dropdown">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-                                    Pending Requests <span class="caret"></span>
+                                    Requests <span class="caret"></span>
                                 </a>
                                 <ul class="dropdown-menu" role="menu">
-                                    <li><a href="{{ url('booking_request/pending') }}">Guest House</a></li>
-                                    <li><a href="#">Food Order</a></li>
+                                    <li><a href="{{ url('booking_request/requests') }}">Guest House</a></li>
+                                    <li><a href="{{ url('food_booking/requests') }}">Food Order</a></li>
                                 </ul>
                             </li>
                         @endif

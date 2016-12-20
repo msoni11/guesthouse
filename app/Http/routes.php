@@ -110,9 +110,13 @@ Route::group(['middleware' => ['web']], function () {
     
     Route::get('/booking_request/updatebyowner/{booking_request}', 'BookingRequestController@UpdateStatusByOwner')->name('UpdateStatusByOwner');
 
-    Route::get('/food_bookings/updatestatus/{food_bookings}', 'FoodBookingController@UpdateStatus')->name('UpdateStatus');
+    Route::get('/food_bookings/updatestatus/{food_bookings}', 'FoodBookingController@UpdateStatusByHOD')->name('UpdateStatusByHOD');
 
-    Route::get('/booking_request/pending','BookingRequestController@Pending')->name('pending');
+    Route::get('/food_bookings/updatebyowner/{food_bookings}', 'FoodBookingController@UpdateStatusByOwner')->name('UpdateStatusByOwner');
+
+    Route::get('/booking_request/requests','BookingRequestController@Requests')->name('requests');
+
+    Route::get('/food_booking/requests','FoodBookingController@Requests')->name('requests');
     
     Route::resource('booking_request','BookingRequestController');
     

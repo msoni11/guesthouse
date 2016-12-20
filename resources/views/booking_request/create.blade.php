@@ -137,7 +137,7 @@
                 <div class="form-group form-inline">
                     <div class="row">
                       <div class="col-md-4">
-                              {!! Form::label('HOD', 'Approval:') !!}
+                              {!! Form::label('HOD', 'Approver:') !!}
                           <span style="color:red">*</span>
                           {!! Form::select('hod_id', $hods, null, ['class'=>'form-control']) !!}
                           </div>
