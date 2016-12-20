@@ -107,36 +107,37 @@ class FoodBookingController extends Controller
     */
    public function store(Request $request)
    {
-              $this->validate($request, [
-              'no_of_visitors' => 'required',
-              'date' => 'required',
-           //   'name.*' => 'string',
-             //  'email.*' => 'email',
-              'contact_no' => 'digits_between:9,12',
-          ]);
-        $req = $request->all();
-        $req['email_key'] = str_random(30);
-        $food_request =  $req;
-        $res = \GuestHouse\food_bookings::create($food_request); 
-        //if(isset($request->name)) {
-          //  for($i=1; $i<count($request->name)+1; $i++){
-            //    $guest_info = array('name'=>$request->name[$i],
-              //                      'contact_no'=>$request->contact_no[$i],
-                //                    'email'=>$request->email[$i],
-                  //                  'address'=>$request->address[$i],
-                    //                'status'=>1
-                      //          );
-                $guest_res = \GuestHouse\guest_info::create($res);
-                $food_booking_req_guest_info = array('food_booking_id'=>$res->id, 'guest_info_id'=>$guest_res->id); 
-                \GuestHouse\food_booking_guest_info::create($food_booking_req_guest_info);
+       $this->validate($request, [
+           'no_of_visitors' => 'required',
+           'date' => 'required',
+           'purpose' => 'required',
+           'food_type' => 'required',
+           'contact_no' => 'digits_between:9,12',
+       ]);
+       $req = $request->all();
+       $req['email_key'] = str_random(30);
+       $food_request = $req;
+       $res = \GuestHouse\food_bookings::create($food_request);
+       //if (isset($request->name)) {
+         //  for ($i = 1; $i < count($request->name) + 1; $i++) {
+           //    $guest_info = array('name' => $request->name[$i],
+             //      'contact_no' => $request->contact_no[$i],
+                   //                    'email'=>$request->email[$i],
+                   //                  'address'=>$request->address[$i],
+               //                'status'=>1
+               //);
 
-
-       $this->SendBookingEmail(1, $res->id);
-       Flash::message('Booking Submited successfully!');
-       return redirect('food_booking');
+              // $guest_res = \GuestHouse\guest_info::create($res);
+               // dd($guest_res);die;
+               //\GuestHouse\food_booking_guest_info::create($food_booking_req_guest_info);
+           //}
+      // dd($res);die;
+           //$this->SendBookingEmail(1, $res->id);
+           Flash::message('Booking Submited successfully!');
+           return redirect('food_booking');
+      // }
    }
-   
-      /**
+        /**
     * Show the form for editing the specified resource.
     *
     * @param  int  $id
