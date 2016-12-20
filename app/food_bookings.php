@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class food_bookings extends Model
 {
       protected $fillable = [
-        'no_of_visitors', 'quantity', 'food_type', 'request_by', 'date', 'purpose','email_key','status'];
+        'contact_no','no_of_visitors', 'quantity', 'food_type', 'request_by', 'date', 'purpose','email_key','status'];
       
     /**
      * The attributes that should be casted to native types.
@@ -29,7 +29,8 @@ class food_bookings extends Model
      /**
      * 
      */
-    public function guest_info(){
+    public function guest_info()
+    {
         return $this->belongsToMany('GuestHouse\guest_info', 'food_booking_guest_infos', 'food_booking_id', 'guest_info_id');
     }
 }
