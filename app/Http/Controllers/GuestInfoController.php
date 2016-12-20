@@ -108,7 +108,7 @@ class GuestInfoController extends Controller
             }
              $search_form_data_arr = array('from_date'=>$from_date, 'to_date'=>$to_date, 'status'=>$request->status);
             //$search_form_data_arr = $request->all();
-            if((isset($request->to_date))||(isset($request->from_date))||(isset($request->status))) {
+            if(isset($request->status) && $request->status != '') {
                  $guest_info = DB::table('guest_infos')
                     ->join('booking_request_guest_infos', 'guest_infos.id', '=', 'booking_request_guest_infos.guest_info_id')
                     ->join('booking_requests', 'booking_request_guest_infos.booking_request_id', '=', 'booking_requests.id')    

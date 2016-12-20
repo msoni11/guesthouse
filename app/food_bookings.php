@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class food_bookings extends Model
 {
       protected $fillable = [
-        'contact_no','no_of_visitors', 'quantity', 'food_type', 'request_by', 'date', 'purpose','email_key','status'];
+        'contact_no','no_of_visitors', 'quantity', 'food_type', 'request_by', 'date', 'purpose','email_key','status', 'hod_id'];
       
     /**
      * The attributes that should be casted to native types.

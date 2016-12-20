@@ -75,9 +75,9 @@ class FoodServedController extends Controller
        $foodserveds = $request->all();
        \GuestHouse\food_served::create($foodserveds);
        if($request->food_served == 1){
-           return redirect('/guest_info/foodpending');
+           return redirect('/foodserved');
        } else {
-           return redirect('/guest_info/pending');
+           return redirect('/guest_info/foodpending');
        }
        
    }//function
