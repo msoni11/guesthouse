@@ -89,7 +89,7 @@
                          <td>{{ $guest->check_in_date }}</td>
                          <td>{{ $guest->check_out_date }}</td>
                          
-                         <td>{{ $guest->total_bill }}</td>                         
+                         <td></td>
                      </tr>
                  @endforeach
 
