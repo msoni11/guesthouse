@@ -36,11 +36,11 @@
                   
                     <div class="col-md-4">
                         {!! Form::label('Food Order', 'Food Order:') !!}
-                        {!! Form::checkbox('food_type[]','lunch',['class'=>'form-control']) !!}
+                        {!! Form::checkbox('food_type[]','lunch',null,['class'=>'form-control']) !!}
                         {!! Form::label('', 'Lunch') !!}
-                        {!! Form::checkbox('food_type[]','dinner',['class'=>'form-control']) !!}
+                        {!! Form::checkbox('food_type[]','dinner',null,['class'=>'form-control']) !!}
                         {!! Form::label('', 'Dinner') !!}
-                        {!! Form::checkbox('food_type[]','breakfast',['class'=>'form-control']) !!}
+                        {!! Form::checkbox('food_type[]','breakfast',null,['class'=>'form-control']) !!}
                         {!! Form::label('','Breakfast') !!}
                     </div>
 

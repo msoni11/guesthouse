@@ -62,11 +62,11 @@
 
                         {!! Form::label('Food Order', 'Food Order:') !!}
                         <span style="color:red">*</span>
-                        {!! Form::checkbox('food_order[]','break-fast',['class'=>'form-control']) !!}
+                        {!! Form::checkbox('food_order[]','break-fast',null,['class'=>'form-control']) !!}
                         {!! Form::label('', 'Break Fast') !!}
-                        {!! Form::checkbox('food_order[]','lunch',['class'=>'form-control']) !!}
+                        {!! Form::checkbox('food_order[]','lunch',null,['class'=>'form-control']) !!}
                         {!! Form::label('', 'Lunch') !!}
-                        {!! Form::checkbox('food_order[]','dinner',['class'=>'form-control']) !!}
+                        {!! Form::checkbox('food_order[]','dinner',null,['class'=>'form-control']) !!}
                         {!! Form::label('', 'Dinner') !!}
 
                          </div>
@@ -133,7 +133,6 @@
                                 <span class="file-custom"></span>
                         </label>
                     </div>
-               </div>
 
                 <div class="form-group form-inline">
                     <div class="row">
