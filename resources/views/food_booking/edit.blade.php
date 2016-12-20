@@ -6,7 +6,7 @@
             <div class="panel-heading panel-primary">Update Food Booking</div>
             <div class="panel-body">
                
-                <?php $food_order_list = array('lunch', 'dinner'); ?>
+                <?php $food_order_list = array('lunch', 'dinner','breakfast'); ?>
  
                
                 {!! Form::model($food_booking,['method' => 'PATCH', 'files'=>true, 'route'=>['food_booking.update',$food_booking->id]]) !!}
