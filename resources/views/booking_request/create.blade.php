@@ -1,3 +1,4 @@
+
 @extends('layouts.app')
 @section('content')
     <div class="container" ng-app='guest_house'>
@@ -35,7 +36,7 @@
 
                           {!! Form::label('Type of Guest', 'Type of Guest:') !!}
                             <span style="color:red">*</span>
-                          {!! Form::select('type_of_guest',['visitor'=>'Visitor', 'employee'=>'Employee', 'contractor'=>'Contractor'],null,['class'=>'form-control', 'ng-model'=>'type_of_guest', 'ng-init'=>"type_of_guest == 'visitor'" ]) !!}
+                          {!! Form::select('type_of_guest',[''=>'Select','visitor'=>'Visitor', 'employee'=>'Employee', 'contractor'=>'Contractor'],null,['class'=>'form-control', 'ng-model'=>'type_of_guest', 'ng-init'=>"type_of_guest == 'visitor'" ]) !!}
                         {!! Form::text('po_no',null,['class'=>'form-control ng-hide', 'ng-show' => "type_of_guest == 'contractor'"]) !!}
 
                           </div>
