@@ -20,6 +20,7 @@ class FoodServedController extends Controller
                ->join('guest_infos', 'food_serveds.guest_info_id', '=', 'guest_infos.id')
                ->join('foods', 'food_serveds.food_id', '=', 'foods.id')
                ->select(DB::raw('food_serveds.*, guest_infos.name as name, foods.name as food_name, guest_infos.name as guest_name'))
+               ->orderby('food_serveds.id', 'desc')
                ->paginate(15);
        return view('foodserved.index', compact('foodserved'));
    }//function
@@ -74,12 +75,7 @@ class FoodServedController extends Controller
    public function Store(Request $request){
        $foodserveds = $request->all();
        \GuestHouse\food_served::create($foodserveds);
-       if($request->food_served == 1){
-           return redirect('/foodserved');
-       } else {
-           return redirect('/guest_info/foodpending');
-       }
-       
+       return redirect('/foodserved');
    }//function
    //-------------------------------------------------------------------------------------------
    

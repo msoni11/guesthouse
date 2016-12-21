@@ -24,7 +24,7 @@
                            
                            {!! Form::submit('Reset', ['class'=>'form-control bt btn-primary', 'name'=>'reset'])!!}
                            
-                           <a href="{{url('/guest_info/foodpending')}}" class="btn btn-success">All Records</a>
+                           <a href="{{url('/food_booking/foodpending')}}" class="btn btn-success">All Records</a>
                        </div>
                        {!! Form::close() !!}
                     </div>
