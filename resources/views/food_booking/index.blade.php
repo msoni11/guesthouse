@@ -68,7 +68,6 @@
                          
                          @if(!in_array('owner',$search_form_data_arr['check_role']))
                              @if($book->status != 0 && $book->status != 1)
-                               <td><a href="{{route('food_booking.edit',$book->id)}}" class="btn btn-warning">Edit</a></td>
                             @endif
                          <td>
                             {!! Form::open(['method' => 'DELETE', 'route'=>['food_booking.destroy', $book->id]]) !!}
