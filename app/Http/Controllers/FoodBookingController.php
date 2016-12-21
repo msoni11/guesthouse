@@ -97,7 +97,7 @@ class FoodBookingController extends Controller
    {
        $this->validate($request, [
            'no_of_visitors' => 'required',
-           'date' => 'required',
+           'date' => 'required|after:tomorrow',
            'purpose' => 'required',
            'food_type' => 'required',
            'contact_no' => 'digits_between:9,12',
