@@ -28,6 +28,7 @@ guest_house.controller('guestCtr', function($scope, $http){
     }
 
 });
+
 guest_house.filter('range', function() {
   return function(input, total) {
     total = parseInt(total);
@@ -38,4 +39,23 @@ guest_house.filter('range', function() {
 
     return input;
   };
-});   
+});
+
+
+
+
+var allotment =  angular.module('allotment', [], function($interpolateProvider){
+    $interpolateProvider.startSymbol('<%');
+    $interpolateProvider.endSymbol('%>');
+});
+
+allotment.controller('allotmentCtrl', function ($scope) {
+    $scope.changeRoom = function ($rooms) {
+        angular.forEach($rooms, function (v, k) {
+            if (k == $scope.room_no) {
+                //Got the room. display it
+                $scope.msgText = 'Room ' +v.room_no+ ' has capacity of ' + v.capacity + ' guests and currently ' + v.cnt + ' guests are allocated.';
+            }
+        })
+    }
+})

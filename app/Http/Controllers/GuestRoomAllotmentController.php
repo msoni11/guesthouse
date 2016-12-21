@@ -59,8 +59,13 @@ class GuestRoomAllotmentController extends Controller
                          ->WHERE('booking_request_guest_infos.guest_info_id', '=', $request->guest_info_id)->first();
        }
        $users = \GuestHouse\guest_info::lists('name', 'id');
-       $rooms = \GuestHouse\Room::lists('room_no', 'id');       
-       return view('guestroomallotment.create', compact('users', 'rooms', 'booking_request'));
+       $rooms = \GuestHouse\Room::lists('room_no', 'id')->all();
+       $cnt_room =  DB::table('guest_room_allotments')->join('rooms', 'guest_room_allotments.room_id', '=', 'rooms.id')
+           ->where('guest_room_allotments.checked_in', '<', 2)
+           ->groupBy('rooms.id')
+           ->select(DB::raw('count(*) as cnt,rooms.id, rooms.room_no, rooms.capacity'))->get();
+       $cntJson = json_encode($cnt_room);
+       return view('guestroomallotment.create', compact('users', 'rooms', 'booking_request', 'cntJson'));
    }//function
    
    //--------------------------------------------------------------------------------
@@ -70,18 +75,20 @@ class GuestRoomAllotmentController extends Controller
     */
    public function Store(Request $request){
        $guestroomallotments = $request->all();
-       $cnt_room =  DB::table('guest_room_allotments')->join('rooms', 'guest_room_allotments.room_id', '=', 'rooms.id') 
-          ->where('check_out_date', '=', '0000-00-00 00:00:00')     
+       $this->validate($request, [
+           'room_no' => 'required',
+       ]);
+       $cnt_room =  DB::table('guest_room_allotments')->join('rooms', 'guest_room_allotments.room_id', '=', 'rooms.id')
+          ->where('guest_room_allotments.checked_in', '<', 2)
          ->where('rooms.id', '=', $request->room_id)           
           ->select(DB::raw('count(*) as cnt,rooms.capacity'))->get();   
-       
        if($cnt_room){
           if($cnt_room[0]->cnt<$cnt_room[0]->capacity){
               \GuestHouse\guest_room_allotments::create($guestroomallotments);
               return redirect('/guest_info/pending');
           }
             Flash::error('Please  choose another room, Room Capacity Exceeded');
-            return redirect('/guestroomallotment/create');
+            return redirect('/guestroomallotment/create?guest_info_id='.$request->guest_info_id);
        }
        
    }//function
@@ -198,5 +205,5 @@ class GuestRoomAllotmentController extends Controller
         });
     }//function
     //---------------------------------------------------------------------------------------------------------------------
-    
+
 }
