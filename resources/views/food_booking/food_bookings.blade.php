@@ -11,7 +11,7 @@
                 <div class="panel panel-default">
                     <div class="panel-body">
                         @include('flash::message') 
-                       {!! Form::model($search_form_data_arr, ['url' => '/guest_info/food_bookings', 'method'=>'GET']) !!}
+                       {!! Form::model($search_form_data_arr, ['url' => '/food_booking/food_bookings_report', 'method'=>'GET']) !!}
                        <div class="form-group form-inline">
                            {!! Form::Label('From Date', 'From Date:') !!}
                            {!! Form::text('from_date', null, ['class'=>'form-control', 'id'=>'from_date'])!!}
@@ -34,10 +34,9 @@
                         <thead>
                  <tr >
                      <th>Id</th>
-                     <th>Name</th>
+                     <th>No of Visitors</th>
+                     <th>Quantity</th>
                      <th>Contact No</th>
-                     <th>Email</th>
-                     <th>Address</th>
                      <th>Food</th>
                      <th>Request By</th>
                      <th>Date</th>
@@ -46,30 +45,33 @@
                  </thead>
                  <tbody>
                  <?php $index = 1 ?>    
-                 @foreach ($guest_info as $guest)
+                 @foreach ($food_bookings as $booking)
                      <tr>
                          <td>{{ $index ++ }}</td>
-                         <td>{{ $guest->name }}</td>
-                         <td>{{ $guest->contact_no }}</td>
-                         <td>{{ $guest->email }}</td>
-                         <td>{{ $guest->address }}</td>
-                         <td>@if(is_array(json_decode($guest->food_type)))
-                                @foreach(json_decode($guest->food_type) as $food)
+                         <td>{{ $booking->no_of_visitors }}</td>
+                         <td>{{ $booking->quantity }}</td>
+                         <td>{{ $booking->contact_no }}</td>
+                         <td>@if(is_array(json_decode($booking->food_type)))
+                                @foreach(json_decode($booking->food_type) as $food)
                                     {{ ucfirst($food) }}
                                 @endforeach
                              @endif
                          </td>
-                         <td>{{ $guest->request_by }}</td> 
-                         <td>{{ $guest->date }}</td>
+                         <td>{{ $booking->request_by }}</td>
+                         <td>{{ $booking->date }}</td>
                          <td>
-                             Completed
+                             @if($booking->served == 0)
+                                 In-completed
+                             @else
+                                 Completed
+                             @endif
                          </td>
                      </tr>
                  @endforeach
 
                  </tbody>
                     </table>
-                    {!! $guest_info->links() !!}
+                    {!! $food_bookings->links() !!}
                 </div>
             </div>
                  <script>

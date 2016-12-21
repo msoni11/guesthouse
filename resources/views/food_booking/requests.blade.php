@@ -75,8 +75,6 @@
                                 {!! Form::hidden('status',0,null,['class'=>'form-control']) !!}
                                 {!! Form::close() !!}
                             </td>
-                            @elseif($book->served)
-                                 <td>completed</td>
                             @else
                                 <td></td>
                             @endif
@@ -96,8 +94,6 @@
                                 {!! Form::hidden('status',0,null,['class'=>'form-control']) !!}
                                 {!! Form::close() !!}
                             </td>
-                            @elseif($book->served)
-                                <td>completed</td>
                             @else
                                 <td></td>
                             @endif

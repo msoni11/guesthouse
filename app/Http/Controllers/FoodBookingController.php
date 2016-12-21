@@ -427,4 +427,54 @@ class FoodBookingController extends Controller
             return  redirect('/login');
         }
     }
+
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return Response
+     */
+    public function FoodBookingsReport(request $request)
+    {
+        $user = new \GuestHouse\User;
+        $userRole = $user->check_role();
+        if(Auth::check()) {
+            if (in_array('admin',  $userRole)) {
+                $status = 1;
+
+                $from_date = date('Y/m/d 00:00:00', strtotime('-1 day'));
+                $to_date = date('Y/m/d 23:59:59', strtotime('+1 day'));
+
+                if (isset($request->from_date) && $request->from_date !== '') {
+                    $from_date = $request->from_date . ' 00:00:00';
+                }
+
+                if (isset($request->to_date) && $request->to_date !== '') {
+                    $to_date = $request->to_date . ' 23:59:59';
+                }
+
+                if (isset($request->reset)) {
+                    $from_date = date('Y/m/d 00:00:00', strtotime('-1 day'));
+                    $to_date = date('Y/m/d 23:59:59', strtotime('+1 day'));
+                }
+
+                $search_form_data_arr = array('from_date' => $from_date, 'to_date' => $to_date, 'status' => 1);
+
+                $food_bookings = DB::table('food_bookings')
+                    ->join('users', 'food_bookings.request_by', '=', 'users.id')
+                    ->where('food_bookings.date', '>', $from_date)
+                    ->where('food_bookings.date', '<', $to_date)
+                    ->where('food_bookings.status', '=', $status)
+                    ->select(DB::raw('food_bookings.*, users.name as request_by'))
+                    ->orderby('food_bookings.id', 'desc')
+                    ->paginate(20);
+
+                return view('food_booking.food_bookings', compact('food_bookings', 'search_form_data_arr'));
+            } else {
+                return redirect('food_booking');
+            }
+        } else {
+            return  redirect('/login');
+        }
+    }
 }
