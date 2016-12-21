@@ -41,8 +41,8 @@
 
                       </div>
                     </div>
-                </div>    
-                <div class="form-group form-inline">
+                </div>
+                    <div class="form-group form-inline">
                     <div class="row">
                     <div class="col-md-4">
 
@@ -123,6 +123,7 @@
                         {!! Form::text('address[<% $index + 1 %>]',null,['class'=>'form-control']) !!}
 
                     </div>
+                    </div>
                     <div class="form-group form-inline">
                         {!! Form::label('Attach Document', 'Attach Document:') !!}
                             <span style="color:red">*</span>
@@ -149,7 +150,7 @@
                     {!! Form::submit('Submit Booking', ['class' => 'btn btn-primary form-control']) !!}
                     </div>
                 </div>
-                
+
                 {!! Form::close() !!}
             </div>
             <script>
