@@ -72,11 +72,7 @@ Route::group(['middleware' => ['web']], function () {
     
     Route::get('/guest_info/pending','GuestInfoController@Pending')->name('pending');
     
-    Route::get('/guest_info/foodpending','GuestInfoController@FoodPending')->name('foodpending');
-    
     Route::get('/guest_info/guest_house_bookings','GuestInfoController@GuestHouseBookings')->name('guest_house_bookings');
-    
-    Route::get('/guest_info/food_bookings','GuestInfoController@FoodBookings')->name('food_bookings');
     
     Route::get('/guest_info/pendingcheckin','GuestInfoController@PendingCheckIn')->name('pendingcheckin');
     
@@ -117,6 +113,10 @@ Route::group(['middleware' => ['web']], function () {
     Route::get('/booking_request/requests','BookingRequestController@Requests')->name('requests');
 
     Route::get('/food_booking/requests','FoodBookingController@Requests')->name('requests');
+
+    Route::get('/food_booking/foodpending','FoodBookingController@FoodPending')->name('foodpending');
+
+    Route::get('/food_booking/food_bookings_report','FoodBookingController@FoodBookingsReport')->name('food_bookings_report');
     
     Route::resource('booking_request','BookingRequestController');
     

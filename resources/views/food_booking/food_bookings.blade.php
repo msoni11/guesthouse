@@ -11,7 +11,7 @@
                 <div class="panel panel-default">
                     <div class="panel-body">
                         @include('flash::message') 
-                       {!! Form::model($search_form_data_arr, ['url' => '/guest_info/foodpending', 'method'=>'GET']) !!}
+                       {!! Form::model($search_form_data_arr, ['url' => '/food_booking/food_bookings_report', 'method'=>'GET']) !!}
                        <div class="form-group form-inline">
                            {!! Form::Label('From Date', 'From Date:') !!}
                            {!! Form::text('from_date', null, ['class'=>'form-control', 'id'=>'from_date'])!!}
@@ -24,7 +24,7 @@
                            
                            {!! Form::submit('Reset', ['class'=>'form-control bt btn-primary', 'name'=>'reset'])!!}
                            
-                           <a href="{{url('/guest_info/foodpending')}}" class="btn btn-success">All Records</a>
+                           <a href="{{url('/food_booking/foodpending')}}" class="btn btn-success">All Records</a>
                        </div>
                        {!! Form::close() !!}
                     </div>
@@ -34,54 +34,44 @@
                         <thead>
                  <tr >
                      <th>Id</th>
-                     <th>Name</th>
+                     <th>No of Visitors</th>
+                     <th>Quantity</th>
                      <th>Contact No</th>
-                     <th>Email</th>
-                     <th>Address</th>
                      <th>Food</th>
                      <th>Request By</th>
                      <th>Date</th>
-                     <th colspan="4">Actions</th>
+                     <th colspan="4">Status</th>
                  </tr>
                  </thead>
                  <tbody>
                  <?php $index = 1 ?>    
-                 @foreach ($guest_info as $guest)
+                 @foreach ($food_bookings as $booking)
                      <tr>
                          <td>{{ $index ++ }}</td>
-                         <td>{{ $guest->name }}</td>
-                         <td>{{ $guest->contact_no }}</td>
-                         <td>{{ $guest->email }}</td>
-                         <td>{{ $guest->address }}</td>
-                         <td>@if(is_array(json_decode($guest->food_type)))
-                                @foreach(json_decode($guest->food_type) as $food)
+                         <td>{{ $booking->no_of_visitors }}</td>
+                         <td>{{ $booking->quantity }}</td>
+                         <td>{{ $booking->contact_no }}</td>
+                         <td>@if(is_array(json_decode($booking->food_type)))
+                                @foreach(json_decode($booking->food_type) as $food)
                                     {{ ucfirst($food) }}
                                 @endforeach
                              @endif
                          </td>
-                         <td>{{ $guest->request_by }}</td> 
-                         <td>{{ $guest->date }}</td>
-<!--                         <td><a href="{{url('guest_info',$guest->id)}}" class="btn btn-primary"><span aria-hidden="true" class="glyphicon glyphicon-eye-open"></span></a></td>
-                         <td><a href="{{route('guest_info.edit',$guest->id)}}" class="btn btn-warning"><span aria-hidden="true" class="glyphicon glyphicon-pencil"></span></a></td>-->
-                         @if($guest->served == 0)
-                         <td> 
-                                {!! Form::open(['method' => 'PATCH','route'=>['guest_info.update',$guest->id]]) !!}
-                                <button class="btn btn-primary"><span aria-hidden="true" class="glyphicon glyphicon-ok-sign"></span></button>
-                                {!! Form::hidden('served',1,null,['class'=>'form-control']) !!}
-                                {!! Form::close() !!}
-                            
-                         </td>
-                         @else
+                         <td>{{ $booking->request_by }}</td>
+                         <td>{{ $booking->date }}</td>
                          <td>
-                             Completed
+                             @if($booking->served == 0)
+                                 In-completed
+                             @else
+                                 Completed
+                             @endif
                          </td>
-                         @endif
                      </tr>
                  @endforeach
 
                  </tbody>
                     </table>
-                    {!! $guest_info->links() !!}
+                    {!! $food_bookings->links() !!}
                 </div>
             </div>
                  <script>

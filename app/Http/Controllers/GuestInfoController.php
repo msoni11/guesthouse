@@ -141,99 +141,6 @@ class GuestInfoController extends Controller
        }
    }
    
-   /**
-    * Display a listing of the resource.
-    *
-    * @return Response
-    */
-   public function FoodPending(request $request)
-   {
-       if(Auth::check()) {
-            $status = 1;
-            
-            $from_date = date('Y/m/d 00:00:00', strtotime('-1 day'));
-            $to_date = date('Y/m/d 23:59:59', strtotime('+1 day'));
-            
-            if(isset($request->from_date) && $request->from_date !=='') {
-                $from_date = $request->from_date .' 00:00:00';
-            }
-
-            if(isset($request->to_date) && $request->to_date !=='') {
-                $to_date = $request->to_date . ' 23:59:59';
-            }
-            
-            if(isset($request->reset)) {
-                $from_date = date('Y/m/d 00:00:00', strtotime('-1 day'));
-                $to_date = date('Y/m/d 23:59:59', strtotime('+1 day'));
-            }
-            
-            $search_form_data_arr = array('from_date'=>$from_date, 'to_date'=>$to_date, 'status'=>1);
-            //$search_form_data_arr = $request->all();
-            
-
-                 $guest_info = DB::table('guest_infos')
-                 ->join('food_booking_guest_infos', 'guest_infos.id', '=', 'food_booking_guest_infos.guest_info_id')
-                 ->join('food_bookings', 'food_booking_guest_infos.food_booking_id','=','food_bookings.id')
-                 ->join('users', 'food_bookings.request_by','=','users.id')
-                 ->where('food_bookings.date','>',$from_date)
-                 ->where('food_bookings.date','<',$to_date)
-                 ->where('food_bookings.status','=', $status)      
-                 ->select(DB::raw('guest_infos.*, food_bookings.date as date, food_bookings.food_type as food_type, food_bookings.id as food_id, users.name as request_by'))
-                 ->orderby('food_bookings.id', 'desc')
-                 ->paginate(20);
- 
-            return view('guest_info.foodpending',compact('guest_info', 'search_form_data_arr'));
-        }else{
-          return  redirect('/login');
-       }
-   }
-   
-   /**
-    * Display a listing of the resource.
-    *
-    * @return Response
-    */
-   public function FoodBookings(request $request)
-   {
-       if(Auth::check()) {
-            $status = 1;
-            
-            $from_date = date('Y/m/d 00:00:00', strtotime('-1 day'));
-            $to_date = date('Y/m/d 23:59:59', strtotime('+1 day'));
-            
-            if(isset($request->from_date) && $request->from_date !=='') {
-                $from_date = $request->from_date .' 00:00:00';
-            }
-
-            if(isset($request->to_date) && $request->to_date !=='') {
-                $to_date = $request->to_date . ' 23:59:59';
-            }
-            
-            if(isset($request->reset)) {
-                $from_date = date('Y/m/d 00:00:00', strtotime('-1 day'));
-                $to_date = date('Y/m/d 23:59:59', strtotime('+1 day'));
-            }
-            
-            $search_form_data_arr = array('from_date'=>$from_date, 'to_date'=>$to_date, 'status'=>1);
-            //$search_form_data_arr = $request->all();
-            
-
-                 $guest_info = DB::table('guest_infos')
-                 ->join('food_booking_guest_infos', 'guest_infos.id', '=', 'food_booking_guest_infos.guest_info_id')
-                 ->join('food_bookings', 'food_booking_guest_infos.food_booking_id','=','food_bookings.id')
-                 ->join('users', 'food_bookings.request_by','=','users.id')
-                 ->where('food_bookings.date','>',$from_date)
-                 ->where('food_bookings.date','<',$to_date)
-                 ->where('food_bookings.status','=', $status)      
-                 ->select(DB::raw('guest_infos.*, food_bookings.date as date, food_bookings.food_type as food_type, food_bookings.id as food_id, users.name as request_by'))
-                 ->orderby('food_bookings.id', 'desc')
-                 ->paginate(20);
- 
-            return view('guest_info.food_bookings',compact('guest_info', 'search_form_data_arr'));
-        }else{
-          return  redirect('/login');
-       }
-   }
    
    /**
     * Display a listing of the resource.
@@ -339,12 +246,10 @@ class GuestInfoController extends Controller
    public function update(Request $request, $id)
    {
        
-       if(!isset($request->served)){
 //      $this->validate($request, [
 //            'finger_print' => 'required|unique:guest_infos|max:255',
 //        ]);  
-       }
-       
+
       $update_guest_info = $request->all();
       if($request->file('doc')){
         $doc = $this->upload($request->file('doc'));
@@ -353,12 +258,7 @@ class GuestInfoController extends Controller
 
       $guest_info = \GuestHouse\guest_info::find($id);
       $guest_info->update($update_guest_info);
-      if($request->served == 1){
-            Flash::message('Food Served');
-            return redirect('/guest_info/foodpending');
-      } else {
-            return redirect('/guest_info/pending');
-      }     
+      return redirect('/guest_info/pending');
    }
    
    /**

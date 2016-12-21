@@ -139,48 +139,30 @@ class FoodBookingController extends Controller
       //$update_food_booking['email_key'] = str_random(30);
       $food_booking = \GuestHouse\food_bookings::find($id);
       $food_booking->update($update_food_booking);
-      if(isset($request->name)) {
-        for($i=0; $i<count($request->name); $i++){
-            if(isset($request->guest_id[$i])) {
-              $guest_info_req = array('name'=>$request->name[$i], 
-                                    'contact_no'=>$request->contact_no[$i],
-                                    'email'=>$request->email[$i],
-                                    'address'=>$request->address[$i],
-                                    'status'=>1      
-                                );
-              $guest_info = \GuestHouse\guest_info::find($request->guest_id[$i]);
-              $guest_info->update($guest_info_req);
-            } else {
-               $guest_info_req = array('name'=>$request->name[$i], 
-                                    'contact_no'=>$request->contact_no[$i],
-                                    'email'=>$request->email[$i],
-                                    'address'=>$request->address[$i],
-                                    'status'=>1        
-                                );
-              $guest_res = \GuestHouse\guest_info::create($guest_info_req); 
-              $food_booking_guest_info = array('food_booking_id'=>$id, 'guest_info_id'=>$guest_res->id); 
-              \GuestHouse\food_booking_guest_info::create($food_booking_guest_info);
-            }
 
-        }      
-      }
-      
-      //Flash::message('Booking Rejected');
-       if($request->status == 1 || $request->status == 2) {
-         Flash::message('Booking Accepted');
-       } else if($request->status == 0){
-         Flash::message('Booking Rejected');
+       if (isset($request->status)) {
+           if($request->status == 1 || $request->status == 2) {
+               Flash::message('Booking Accepted');
+           } else if($request->status == 0){
+               Flash::message('Booking Rejected');
+           }
+
+           if ($request->status == 2) {
+               $this->SendConfirmationToOwner($id);
+           } else {
+               $this->SendConfirmationEmail($id);
+           }
+           return redirect('food_booking/requests');
        }
 
-       if ($request->status == 2) {
-           $this->SendConfirmationToOwner($id);
-       } else {
-           $this->SendConfirmationEmail($id);
-
+       if (isset($request->served)) {
+           if ($request->served == 1) {
+               Flash::message('Food Served');
+           } else {
+               Flash::message('Food Not Served');
+           }
+           return redirect('/food_booking/foodpending');
        }
-       
-      return redirect('food_booking/requests');
-      
    }//function
    //-------------------------------------------------------------------------------------------------------------------------------
    
@@ -396,5 +378,103 @@ class FoodBookingController extends Controller
 
         return view('food_booking.requests',compact('food_booking'), compact('search_form_data_arr'));
 
+    }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return Response
+     */
+    public function FoodPending(request $request) {
+        $user = new \GuestHouse\User;
+        $userRole = $user->check_role();
+        if(Auth::check()) {
+            if (in_array('admin',  $userRole) || in_array('owner',  $userRole) || in_array('receptionist',  $userRole)) {
+                $status = 1;
+
+                $from_date = date('Y/m/d 00:00:00', strtotime('-1 day'));
+                $to_date = date('Y/m/d 23:59:59', strtotime('+1 day'));
+
+                if (isset($request->from_date) && $request->from_date !== '') {
+                    $from_date = $request->from_date . ' 00:00:00';
+                }
+
+                if (isset($request->to_date) && $request->to_date !== '') {
+                    $to_date = $request->to_date . ' 23:59:59';
+                }
+
+                if (isset($request->reset)) {
+                    $from_date = date('Y/m/d 00:00:00', strtotime('-1 day'));
+                    $to_date = date('Y/m/d 23:59:59', strtotime('+1 day'));
+                }
+
+                $search_form_data_arr = array('from_date' => $from_date, 'to_date' => $to_date, 'status' => 1);
+
+                $food_bookings = DB::table('food_bookings')
+                    ->join('users', 'food_bookings.request_by', '=', 'users.id')
+                    ->where('food_bookings.date', '>', $from_date)
+                    ->where('food_bookings.date', '<', $to_date)
+                    ->where('food_bookings.status', '=', $status)
+                    ->select(DB::raw('food_bookings.*, users.name as request_by'))
+                    ->orderby('food_bookings.id', 'desc')
+                    ->paginate(20);
+
+                return view('food_booking.foodpending', compact('food_bookings', 'search_form_data_arr'));
+            } else {
+                return redirect('food_booking');
+            }
+        } else {
+            return  redirect('/login');
+        }
+    }
+
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return Response
+     */
+    public function FoodBookingsReport(request $request)
+    {
+        $user = new \GuestHouse\User;
+        $userRole = $user->check_role();
+        if(Auth::check()) {
+            if (in_array('admin',  $userRole)) {
+                $status = 1;
+
+                $from_date = date('Y/m/d 00:00:00', strtotime('-1 day'));
+                $to_date = date('Y/m/d 23:59:59', strtotime('+1 day'));
+
+                if (isset($request->from_date) && $request->from_date !== '') {
+                    $from_date = $request->from_date . ' 00:00:00';
+                }
+
+                if (isset($request->to_date) && $request->to_date !== '') {
+                    $to_date = $request->to_date . ' 23:59:59';
+                }
+
+                if (isset($request->reset)) {
+                    $from_date = date('Y/m/d 00:00:00', strtotime('-1 day'));
+                    $to_date = date('Y/m/d 23:59:59', strtotime('+1 day'));
+                }
+
+                $search_form_data_arr = array('from_date' => $from_date, 'to_date' => $to_date, 'status' => 1);
+
+                $food_bookings = DB::table('food_bookings')
+                    ->join('users', 'food_bookings.request_by', '=', 'users.id')
+                    ->where('food_bookings.date', '>', $from_date)
+                    ->where('food_bookings.date', '<', $to_date)
+                    ->where('food_bookings.status', '=', $status)
+                    ->select(DB::raw('food_bookings.*, users.name as request_by'))
+                    ->orderby('food_bookings.id', 'desc')
+                    ->paginate(20);
+
+                return view('food_booking.food_bookings', compact('food_bookings', 'search_form_data_arr'));
+            } else {
+                return redirect('food_booking');
+            }
+        } else {
+            return  redirect('/login');
+        }
     }
 }
