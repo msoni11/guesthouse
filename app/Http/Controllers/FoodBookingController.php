@@ -256,7 +256,7 @@ class FoodBookingController extends Controller
         $emails = [$owner->email];
         $mail = Mail::send('emails.food_bookings', ['users'=> $users, 'food_bookings'=> $food_bookings, 'links'=>$links], function ($m) use ($emails) {
             $m->from('support@hzl.com', 'GHMS Team');
-            $m->to($emails)->subject('Guesthouse Food Booking Request');
+            $m->to($emails)->subject('Food request in Guest House');
         });
     }
 
@@ -278,7 +278,7 @@ class FoodBookingController extends Controller
         $emails = [$owner->email];
         $mail = Mail::send('emails.food_bookings', ['users'=> $users, 'food_bookings'=> $food_bookings, 'links'=>$links], function ($m) use ($emails) {
             $m->from('support@hzl.com', 'GHMS Team');
-            $m->to($emails)->subject('Guesthouse Food Booking Request');
+            $m->to($emails)->subject('Food request in Guest House');
         });
     }//function
     //---------------------------------------------------------------------------------------------------------------------
@@ -304,7 +304,7 @@ class FoodBookingController extends Controller
         $emails = [$user->email];
         $mail = Mail::send('emails.food_bookings_confirm', ['users'=> $users, 'food_bookings'=> $food_bookings, 'guest_info'=>$guest_info], function ($m) use ($emails, $status) {
             $m->from('support@hzl.com', 'GHMS Team');
-            $m->to($emails)->subject('Guesthouse Food Booking Request '. $status);
+            $m->to($emails)->subject('Food request in Guest House '. $status);
         });
     }//function
     //---------------------------------------------------------------------------------------------------------------------

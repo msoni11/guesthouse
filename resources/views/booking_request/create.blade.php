@@ -115,7 +115,6 @@
                         {!! Form::text('contact_no[<% $index + 1 %>]',null,['class'=>'form-control']) !!}
 
                         {!! Form::label('Guest Email', 'Guest Email:') !!}
-                        <span style="color:red">*</span>
                         {!! Form::text('email[<% $index + 1 %>]',null,['class'=>'form-control']) !!}
 
 
