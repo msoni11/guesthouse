@@ -74,7 +74,10 @@ class FoodServedController extends Controller
     */
    public function Store(Request $request){
        $foodserveds = $request->all();
-       \GuestHouse\food_served::create($foodserveds);
+       $res = \GuestHouse\food_served::create($foodserveds);
+       $food = \GuestHouse\food::find($res->food_id);
+       $res->price = $food->price;
+       $res->save();
        return redirect('/foodserved');
    }//function
    //-------------------------------------------------------------------------------------------
@@ -98,8 +101,11 @@ class FoodServedController extends Controller
      */
     public function update(Request $request, $id){
         $all_data = $request->all();
-        $foodserved = \GuestHouse\food_served::find($id); 
+        $foodserved = \GuestHouse\food_served::find($id);
         $foodserved->update($all_data);
+        $food = \GuestHouse\food::find($foodserved->food_id);
+        $foodserved->price = $food->price;
+        $foodserved->save();
         return redirect('foodserved');
     }
     

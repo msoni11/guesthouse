@@ -148,6 +148,7 @@ class GuestRoomAllotmentController extends Controller
                   ->join('foods', 'food_serveds.food_id', '=', 'foods.id')
                   ->where('food_serveds.guest_info_id', '=', $guestroomallotment[0]->guest_info_id)
                   ->wherebetween('food_serveds.created_at', [$guestroomallotment[0]->check_in_date, $guestroomallotment[0]->check_out_date])
+                  ->select(DB::raw('food_serveds.*, foods.name as name'))
                   ->get();
       }
       return view('guestroomallotment.show',compact('guestroomallotment', 'foods'));
@@ -192,6 +193,7 @@ class GuestRoomAllotmentController extends Controller
                   ->join('foods', 'food_serveds.food_id', '=', 'foods.id')
                   ->where('food_serveds.guest_info_id', '=', $guestroomallotment[0]->guest_info_id)
                   ->wherebetween('food_serveds.created_at', [$guestroomallotment[0]->check_in_date, $guestroomallotment[0]->check_out_date])
+                  ->select(DB::raw('food_serveds.*, foods.name as name'))
                   ->get(); 
       }
        //dd($boking_request->id);
