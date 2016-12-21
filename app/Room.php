@@ -8,7 +8,7 @@ class Room extends Model
 {
     //
     protected $fillable = [
-        'room_no', 'room_type', 'description', 'guest_house_id', 'status','capacity'
+        'room_no', 'room_type', 'description', 'guest_house_id', 'status','capacity', 'rent'
     ];
     
      /**

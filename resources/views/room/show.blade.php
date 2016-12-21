@@ -9,31 +9,37 @@
                 <div class="form-group">
                     <label for="room_no" class="col-sm-2 control-label">Room No</label>
                     <div class="col-sm-10">
-                        <input type="text" class="form-control" id="title" placeholder={{$rooms->room_no}} readonly>
+                        <input type="text" class="form-control" id="title" placeholder='{{$rooms->room_no}}' readonly>
                     </div>
                 </div>
                <div class="form-group">
                     <label for="room_type" class="col-sm-2 control-label">Room Type</label>
                     <div class="col-sm-10">
-                        <input type="text" class="form-control" id="title" placeholder={{$rooms->room_type}} readonly>
+                        <input type="text" class="form-control" id="title" placeholder='{{$rooms->room_type}}' readonly>
                     </div>
                 </div>     
                 <div class="form-group">
                     <label for="description" class="col-sm-2 control-label">Description</label>
                     <div class="col-sm-10">
-                        <input type="text" class="form-control" id="author" placeholder={{$rooms->description}} readonly>
+                        <input type="text" class="form-control" id="author" placeholder='{{$rooms->description}}' readonly>
                     </div>
                 </div>
                  <div class="form-group">
                     <label for="capacity" class="col-sm-2 control-label">Capacity</label>
                     <div class="col-sm-10">
-                        <input type="text" class="form-control" id="capacity" placeholder={{$rooms->capacity}} readonly>
+                        <input type="text" class="form-control" id="capacity" placeholder='{{$rooms->capacity}}' readonly>
                     </div>
                 </div>   
                 <div class="form-group">
                     <label for="guest house" class="col-sm-2 control-label">Guest House</label>
                     <div class="col-sm-10">
-                        <input type="text" class="form-control" id="publisher" placeholder={{$guesthouse->name}} readonly>
+                        <input type="text" class="form-control" id="publisher" placeholder='{{$guesthouse->name}}' readonly>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="rent" class="col-sm-2 control-label">Rent</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" id="rent" placeholder='{{$rooms->rent}}' readonly>
                     </div>
                 </div>
                 <div class="form-group">
