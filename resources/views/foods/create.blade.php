@@ -34,6 +34,9 @@
                         
                     </div>  
                 </div>
+                <div class="form-group">
+                    {!! Form::hidden('location',  Auth::user()->location, null, ['class'=>'form-control']) !!}
+                </div>
                 <div class="form-group  form-inline">
                    <div class="row">
                     <div class="col-md-3"> 
