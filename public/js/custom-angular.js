@@ -52,7 +52,7 @@ var allotment =  angular.module('allotment', [], function($interpolateProvider){
 allotment.controller('allotmentCtrl', function ($scope) {
     $scope.changeRoom = function ($rooms) {
         angular.forEach($rooms, function (v, k) {
-            if (k == $scope.room_no) {
+            if (v.id == $scope.room_no) {
                 //Got the room. display it
                 $scope.msgText = 'Room ' +v.room_no+ ' has capacity of ' + v.capacity + ' guests and currently ' + v.cnt + ' guests are allocated.';
             }

@@ -26,7 +26,7 @@
                         </div>
                         <div class="col-md-1">
                         {!! Form::label('Room No', 'Room No:') !!}
-                        {!! Form::select('room_id',array_merge([''=>'Select'],$rooms), null,['class'=>'form-control', 'ng-model'=>'room_no', 'ng-change'=>"changeRoom($cntJson)"]) !!}
+                        {!! Form::select('room_id',$rooms, null,['class'=>'form-control', 'ng-model'=>'room_no', 'ng-change'=>"changeRoom($cntJson)"]) !!}
                         </div>
                         <div class="col-md-3">                
                         {!! Form::label('Check In Date', 'Check In Date:') !!}
@@ -35,7 +35,7 @@
                        <div class="col-md-3">
                         {!! Form::label('Check Out Date', 'Check Out Date:') !!}
                         {!! Form::text('check_out_date',isset($booking_request->check_out_date)?$booking_request->check_out_date:'',['class'=>'form-control', 'id'=>'check_out_date']) !!}
-                       </div>  
+                       </div>
                     </div>
                     <br />
                     <div class="row">

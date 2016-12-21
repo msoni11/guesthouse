@@ -59,7 +59,8 @@ class GuestRoomAllotmentController extends Controller
                          ->WHERE('booking_request_guest_infos.guest_info_id', '=', $request->guest_info_id)->first();
        }
        $users = \GuestHouse\guest_info::lists('name', 'id');
-       $rooms = \GuestHouse\Room::lists('room_no', 'id')->all();
+       $roomsall = \GuestHouse\Room::lists('room_no', 'id');
+       $rooms = $roomsall->prepend('Select', '');
        $cnt_room =  DB::table('guest_room_allotments')->join('rooms', 'guest_room_allotments.room_id', '=', 'rooms.id')
            ->where('guest_room_allotments.checked_in', '<', 2)
            ->groupBy('rooms.id')
@@ -76,14 +77,15 @@ class GuestRoomAllotmentController extends Controller
    public function Store(Request $request){
        $guestroomallotments = $request->all();
        $this->validate($request, [
-           'room_no' => 'required',
+           'room_id' => 'required',
        ]);
        $cnt_room =  DB::table('guest_room_allotments')->join('rooms', 'guest_room_allotments.room_id', '=', 'rooms.id')
           ->where('guest_room_allotments.checked_in', '<', 2)
          ->where('rooms.id', '=', $request->room_id)           
-          ->select(DB::raw('count(*) as cnt,rooms.capacity'))->get();   
+          ->select(DB::raw('count(*) as cnt,rooms.capacity, rooms.rent'))->get();
        if($cnt_room){
           if($cnt_room[0]->cnt<$cnt_room[0]->capacity){
+              $guestroomallotments['rent'] =  $cnt_room[0]->rent;
               \GuestHouse\guest_room_allotments::create($guestroomallotments);
               return redirect('/guest_info/pending');
           }
