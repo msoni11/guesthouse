@@ -96,24 +96,18 @@
                          @if($guest->guest_room_allotment_id)
                          <td>
                            @if($guest->checked_in == 2)
-                            <a href="{{route('guestroomallotment.show',$guest->guest_room_allotment_id)}}" class="btn btn-success "><span aria-hidden="true" class="glyphicon glyphicon-print"></span></a>                                  
-                          @elseif($guest->checked_in == 1)                                      
-                             {!! Form::open(['method' => 'PATCH', 'route'=>['guestroomallotment.update', $guest->guest_room_allotment_id]]) !!}   
-                             {!! Form::hidden('set_date',1) !!}
-                             {!! Form::hidden('check_out_date',date('Y-m-d H:i:i:s')) !!}
-                             <button class="btn btn-primary">
-                                 Check Out Now
-                             </button>
-                             {!! Form::close() !!}               
+                            <a href="{{route('guestroomallotment.show',$guest->guest_room_allotment_id)}}" class="btn btn-success "><span aria-hidden="true" class="glyphicon glyphicon-print"></span></a>
+                          @elseif($guest->checked_in == 1)
+                             <a href="{{route('guestroomallotment.show',$guest->guest_room_allotment_id)}}" class="btn btn-primary">Check Out Now</a>
                           @else
                              @if(($guest->doc && $guest->guest_photo) || ($guest->type_of_guest == 'guestof'))
-                             <form action="{{ url('/guest_info/updatecheckin') }}" method="GET">           
+                             <form action="{{ url('/guest_info/updatecheckin') }}" method="GET">
                              <?php echo method_field('PUT'); ?>
-                             <input type="hidden" name="_token" value="{{ csrf_token() }}">  
-                             <input type="hidden" name="guest_room_allotment_id" value="{{ $guest->guest_room_allotment_id }}">  
+                             <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                             <input type="hidden" name="guest_room_allotment_id" value="{{ $guest->guest_room_allotment_id }}">
                                                 {!! Form::submit('Check In Now', ['class' => 'btn btn-primary form-control']) !!}
                                        </form>
-                                        @else 
+                                        @else
                                         Attach Required documents.<a href="{{route('guest_info.edit',$guest->id)}}" class="btn btn-warning"> Click Here </a>
                                        @endif
                             @endif           

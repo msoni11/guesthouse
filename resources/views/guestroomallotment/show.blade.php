@@ -63,15 +63,62 @@
                 </tr>
                 </table>
                 @endif
-                
+
                 <div class="form-group">
                     <div class="col-sm-offset-2 col-sm-10">
                         <a href="{{ url('/guest_info/pending')}}" class="btn btn-primary">Back</a>
                     </div>
                 </div>
+                </form>
+
+                @if($guestroom->checked_in == 1)
+                    <div class="col-md-6">
+                        <div id="my_camera"></div>
+                        <form>
+                            <input type=button value="Take Guest Photo Snapshot" onClick="take_snapshot()">
+                        </form>
+                    </div>
+
+                {!! Form::open(['method' => 'PATCH', 'route'=>['guestroomallotment.update', $guestroom->id]]) !!}
+                    <div class="col-md-6">
+                        <div id="results">
+                            @if(!$guest_info->guest_photo_checkout)
+                                <img src="{{ $guest_info->guest_photo_checkout }}" width='240px' height='180px'><br>
+                            @endif</div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-sm-offset-2 col-sm-10">
+                                {!! Form::hidden('set_date',1) !!}
+                                {!! Form::hidden('check_out_date',date('Y-m-d H:i:i:s')) !!}
+                                <input type="submit" class="btn btn-primary" value="Approve" />
+                        </div>
+                    </div>
+                {!! Form::close() !!}
+                @endif
                 <hr>
-            </form>                
             </div>
+            @if($guestroom->checked_in == 1)
+            <script language="JavaScript">
+                Webcam.set({
+                    width: 240,
+                    height: 180,
+                    image_format: 'jpeg',
+                    jpeg_quality: 100,
+                    upload_name: 'test',
+                });
+                Webcam.attach( '#my_camera' );
+                function take_snapshot() {
+                    // take snapshot and get image data
+                    Webcam.snap( function(data_uri) {
+                        // display results in page
+                        document.getElementById('results').innerHTML =
+                                '<img src="'+data_uri+'" name="guest_img"/><input type="hidden" value="'+data_uri+'" name="guest_photo_checkout"/>';
+
+                    } );
+                }
+            </script>
+            @endif
         </div>
     </div>
 </div>
