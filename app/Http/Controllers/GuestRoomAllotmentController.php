@@ -166,7 +166,7 @@ class GuestRoomAllotmentController extends Controller
             $foods = DB::table('food_serveds')
                 ->join('foods', 'food_serveds.food_id', '=', 'foods.id')
                 ->where('food_serveds.guest_info_id', '=', $guestroomallotment[0]->guest_info_id)
-                ->wherebetween('food_serveds.created_at', [$guestroomallotment[0]->check_in_date, $guestroomallotment[0]->check_out_date])
+//                ->wherebetween('food_serveds.created_at', [$guestroomallotment[0]->check_in_date, $guestroomallotment[0]->check_out_date])
                 ->select(DB::raw('food_serveds.*, foods.name as name'))
                 ->get();
         }
