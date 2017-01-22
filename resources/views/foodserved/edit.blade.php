@@ -6,6 +6,9 @@
             <div class="panel-heading panel-default">Update Food Served</div>
             <div class="panel-body">
                 {!! Form::model($foodserved,['method' => 'PATCH','files'=>true,'route'=>['foodserved.update',$foodserved->id]]) !!}
+                @if($request->guestroomallotmentid)
+                    {!! Form::hidden('guestroomallotmentid', $request->guestroomallotmentid) !!}
+                @endif
                 <div class="form-group  form-inline">
                     <div class="row">
                         <div class="col-md-3">

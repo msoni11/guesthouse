@@ -38,6 +38,7 @@
                     </div>
                 </div>
                 @endforeach
+                </form>
                 <hr>
                 @if($foods)
                 <?php $total_price = 0; ?>
@@ -46,6 +47,7 @@
                         <th>Food Item Name</th>
                         <th>Food Quantity</th>
                         <th>Food Price(per Unit)</th>
+                        <th colspan="2">Actions</th>
                     </tr>
                     
                 @foreach($foods as $food)
@@ -53,6 +55,21 @@
                     <td>{{$food->name}}</td>
                     <td>{{$food->quantity}}</td>
                     <td>{{$food->price}}</td>
+                    @if($guestroom->checked_in == 1)
+                        <td>
+                            <a href="{{route('foodserved.edit', array('id' => $food->id, 'guestroomallotmentid' => $guestroom->id))}}" class="btn btn-warning"><span aria-hidden="true" class="glyphicon glyphicon-pencil"></span></a>
+                        </td>
+                        <td>
+                            {!! Form::open(['method' => 'DELETE', 'route'=>['foodserved.destroy', $food->id]]) !!}
+                            {!! Form::hidden('guestroomallotmentid', $guestroom->id) !!}
+                            <button class="btn btn-danger">
+                                <span aria-hidden="true" class="glyphicon glyphicon-remove"></span>
+                            </button>
+                            {!! Form::close() !!}
+                        </td>
+                    @else
+                        <td colspan="2"></td>
+                    @endif
                 <div style="display:none"> {!! $total_price += ($food->quantity*$food->price) !!}</div>
                 </tr>
                 @endforeach
@@ -60,6 +77,7 @@
                     <td></td>
                     <td><strong>Total</strong>(in Rs)</td>
                     <td>{{$total_price}}</td>
+                    <td colspan="2"></td>
                 </tr>
                 </table>
                 @endif
@@ -69,7 +87,6 @@
                         <a href="{{ url('/guest_info/pending')}}" class="btn btn-primary">Back</a>
                     </div>
                 </div>
-                </form>
 
                 @if($guestroom->checked_in == 1)
                     <div class="col-md-6">
