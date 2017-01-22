@@ -20,6 +20,7 @@
                      <th>Description</th>
                      <th>Capacity</th>
                      <th>Guest House</th>
+                     <th>Rent</th>
                      <th>Status</th>
                      <th colspan="3">Actions</th>
                  </tr>
@@ -34,6 +35,7 @@
                          <td>{{ $room->description }}</td>
                          <td>{{ $room->capacity }}</td>
                          <td>{{ $room->guest_house_name }}</td>
+                         <td>{{ $room->rent }}</td>
                          <td>{{ $room->status?'Active':'In Active' }}</td>
                          <td><a href="{{url('room',$room->id)}}" class="btn btn-primary"><span aria-hidden="true" class="glyphicon glyphicon-eye-open"></span></a></td>
                          <td><a href="{{route('room.edit',$room->id)}}" class="btn btn-warning"><span aria-hidden="true" class="glyphicon glyphicon-pencil"></span></a></td>

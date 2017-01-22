@@ -19,6 +19,7 @@ class FoodController extends Controller
    {
        if(Auth::check()) {
             $foods = DB::table('foods')
+                    ->where('location', '=', Auth::user()->location)
                     ->paginate(15);
             return view('foods.index',compact('foods'));
        }else{
@@ -46,7 +47,7 @@ class FoodController extends Controller
    public function store(Request $request)
    {
        $this->validate($request, [
-            'name' => 'required|unique:foods|max:255',
+            'name' => 'required|max:255',
             'description' => 'max:255',
             'price' => 'required',
         ]);

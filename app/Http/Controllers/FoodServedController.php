@@ -20,6 +20,7 @@ class FoodServedController extends Controller
                ->join('guest_infos', 'food_serveds.guest_info_id', '=', 'guest_infos.id')
                ->join('foods', 'food_serveds.food_id', '=', 'foods.id')
                ->select(DB::raw('food_serveds.*, guest_infos.name as name, foods.name as food_name, guest_infos.name as guest_name'))
+               ->orderby('food_serveds.id', 'desc')
                ->paginate(15);
        return view('foodserved.index', compact('foodserved'));
    }//function
@@ -73,13 +74,11 @@ class FoodServedController extends Controller
     */
    public function Store(Request $request){
        $foodserveds = $request->all();
-       \GuestHouse\food_served::create($foodserveds);
-       if($request->food_served == 1){
-           return redirect('/guest_info/foodpending');
-       } else {
-           return redirect('/guest_info/pending');
-       }
-       
+       $res = \GuestHouse\food_served::create($foodserveds);
+       $food = \GuestHouse\food::find($res->food_id);
+       $res->price = $food->price;
+       $res->save();
+       return redirect('/foodserved');
    }//function
    //-------------------------------------------------------------------------------------------
    
@@ -87,11 +86,11 @@ class FoodServedController extends Controller
     * 
     * @return type
     */
-    public function Edit($id){
-       $foodserved = \GuestHouse\food_served::find($id); 
+    public function Edit($id, Request $request){
+       $foodserved = \GuestHouse\food_served::find($id);
        $users = \GuestHouse\guest_info::lists('name', 'id');
        $foods = \GuestHouse\food::lists('name', 'id');
-       return view('foodserved.edit', compact('foodserved','users', 'foods'));
+       return view('foodserved.edit', compact('foodserved','users', 'foods', 'request'));
     }//function
     //-----------------------------------------------------------------------------------------
     
@@ -102,8 +101,14 @@ class FoodServedController extends Controller
      */
     public function update(Request $request, $id){
         $all_data = $request->all();
-        $foodserved = \GuestHouse\food_served::find($id); 
+        $foodserved = \GuestHouse\food_served::find($id);
         $foodserved->update($all_data);
+        $food = \GuestHouse\food::find($foodserved->food_id);
+        $foodserved->price = $food->price;
+        $foodserved->save();
+        if ($request->guestroomallotmentid) {
+            return redirect('/guestroomallotment/'. $request->guestroomallotmentid);
+        }
         return redirect('foodserved');
     }
     
@@ -112,8 +117,11 @@ class FoodServedController extends Controller
      * @param type $id
      * @return type
      */
-    public function Destroy($id){
+    public function Destroy($id, Request $request){
         \GuestHouse\food_served::find($id)->delete();
+        if ($request->guestroomallotmentid) {
+            return redirect('/guestroomallotment/'. $request->guestroomallotmentid);
+        }
         return redirect('foodserved');
     }
 

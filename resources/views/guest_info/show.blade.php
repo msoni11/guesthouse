@@ -25,7 +25,7 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="email" class="col-sm-2 control-label">Email</label>
+                    <label for="email" class="col-sm-2 control-label">Email </label>
                     <div class="col-sm-10">
                         <input type="text" class="form-control" id="publisher" placeholder="{{$guest_info->email}}" readonly>
                     </div>
@@ -45,7 +45,19 @@
                              @endif
                     </div>
                  </div>
-                 @endif
+                    @endif
+
+                    @if($guest_info->guest_photo_checkout)
+                        <div class="form-group">
+                            <label for="doc" class="col-sm-2 control-label">Checkout Photo</label>
+                            <div class="col-sm-10">
+                                @if($guest_info->guest_photo_checkout)
+                                    <img src="{{ $guest_info->guest_photo_checkout}}" style='max-height:600px; max-width:600px'>
+                                @endif
+                            </div>
+                        </div>
+                    @endif
+
                  @if($guest_info->document_type)
                 <div class="form-group">
                     <label for="doc" class="col-sm-2 control-label">Attached Document Type</label>

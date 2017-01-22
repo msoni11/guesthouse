@@ -29,7 +29,11 @@
                 <div class="form-group">
                     {!! Form::label('Status', 'Status:') !!}
                     {!! Form::select('status',[1=>'Active', 0=>'In Active'],null,['class'=>'form-control']) !!}
-                </div>                
+                </div>
+                <div class="form-group">
+                    {!! Form::label('Rent', 'Rent:') !!}
+                    {!! Form::text('rent',null,['class'=>'form-control']) !!}
+                </div>
                 <div class="form-group">
                     {!! Form::submit('Save', ['class' => 'btn btn-primary form-control']) !!}
                 </div>

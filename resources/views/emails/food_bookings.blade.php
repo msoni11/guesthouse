@@ -27,21 +27,21 @@
             <td width="50%">Request By</td><td width="50%">{{$users->name}}</td>
         </tr>
         <tr border="1">
-            <td width="50%">Status</td><td width="50%">{{ $food_bookings->status==2?'Pending':'' }} {{ $food_bookings->status==1?'Accept':'' }} {{ $food_bookings->status==0?'Reject':'' }}</td>
+            <td width="50%">Status</td><td width="50%">{{ $food_bookings->status==3?'Pending from HOD':'' }}{{ $food_bookings->status==2?'Pending from owner':'' }} {{ $food_bookings->status==1?'Accept':'' }} {{ $food_bookings->status==0?'Reject':'' }}</td>
         </tr>
     </table>
     <p></p>
-    <p><strong>Guest Infomation:</strong></p>
-    <table border="1" style='border-collapse: collapse'>
-        <tr border="1" style='border-collapse: collapse'>
-            <th>Guest Name</th><th>Contact No</th><th>Email</th><th>Address</th>
-        </tr>
-        @foreach($guest_info as $guest)
-            <tr border="1" style='border-collapse: collapse'>
-                <td>{{$guest->name}}</td><td>{{$guest->contact_no}}</td><td>{{$guest->email}}</td><td>{{$guest->address}}</td>
-            </tr>
-        @endforeach
-    </table>
+    {{--<p><strong>Guest Infomation:</strong></p>--}}
+    {{--<table border="1" style='border-collapse: collapse'>--}}
+        {{--<tr border="1" style='border-collapse: collapse'>--}}
+            {{--<th>Guest Name</th><th>Contact No</th><th>Email</th><th>Address</th>--}}
+        {{--</tr>--}}
+        {{--@foreach($guest_info as $guest)--}}
+            {{--<tr border="1" style='border-collapse: collapse'>--}}
+                {{--<td>{{$guest->name}}</td><td>{{$guest->contact_no}}</td><td>{{$guest->email}}</td><td>{{$guest->address}}</td>--}}
+            {{--</tr>--}}
+        {{--@endforeach--}}
+    {{--</table>--}}
     <p>Thank You</p>
     <p>HZL Team</p>
 </body>

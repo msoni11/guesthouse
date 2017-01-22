@@ -77,7 +77,7 @@
                             </a>
                             <ul class="dropdown-menu" role="menu">
                                 <li><a href="{{ url('/guest_info/guest_house_bookings') }}">Guest House Bookings</a></li>
-                                <li><a href="{{ url('/guest_info/food_bookings') }}">Food Bookings</a></li>
+                                <li><a href="{{ url('/food_booking/food_bookings_report') }}">Food Bookings</a></li>
                             </ul>
                         </li>
                         @endif
@@ -97,7 +97,7 @@
                                 Food <span class="caret"></span>
                             </a>
                             <ul class="dropdown-menu" role="menu">
-                                <li><a href="{{ url('/guest_info/foodpending') }}">Food</a></li>
+                                <li><a href="{{ url('/food_booking/foodpending') }}">Food</a></li>
                             </ul>
                         </li>
                         @endif
@@ -106,6 +106,18 @@
                         <li><a href="{{ url('/room') }}">All Rooms</a></li>
                         <li><a href="{{ url('/food') }}">Add Food</a></li>
                         
+                        @endif
+
+                        @if(Auth::user()->hasRole(['owner', 'admin', 'hod']))
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+                                    Requests <span class="caret"></span>
+                                </a>
+                                <ul class="dropdown-menu" role="menu">
+                                    <li><a href="{{ url('booking_request/requests') }}">Guest House</a></li>
+                                    <li><a href="{{ url('food_booking/requests') }}">Food Order</a></li>
+                                </ul>
+                            </li>
                         @endif
 
                         @if(!Auth::user()->hasRole('receptionist'))

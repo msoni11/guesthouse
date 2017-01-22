@@ -63,7 +63,7 @@ class GuestInfoController extends Controller
                     ->where('guest_room_allotments.check_in_date','<',$to_date)
                     ->where('guest_room_allotments.checked_in','=',$request->status)
                     ->where('booking_requests.status', '=', '1')
-                    ->select(DB::raw('guest_infos.*,guest_room_allotments.checked_in, guest_room_allotments.check_in_date, guest_room_allotments.check_out_date, guest_room_allotments.id as guest_room_allotment_id, guest_room_allotments.checked_in, rooms.room_no, rooms.id as room_id'))
+                    ->select(DB::raw('guest_infos.*,guest_room_allotments.checked_in, guest_room_allotments.check_in_date, guest_room_allotments.check_out_date, guest_room_allotments.id as guest_room_allotment_id, guest_room_allotments.checked_in, rooms.room_no, rooms.id as room_id,  booking_requests.type_of_guest'))
                     ->orderby('guest_room_allotments.id', 'desc')
                     ->paginate(20);
             } else {
@@ -73,7 +73,7 @@ class GuestInfoController extends Controller
                     ->leftjoin('guest_room_allotments', 'guest_room_allotments.guest_info_id','=','guest_infos.id')
                     ->leftjoin('rooms', 'guest_room_allotments.room_id','=','rooms.id')
                     ->where('booking_requests.status', '=', '1')
-                    ->select(DB::raw('guest_infos.*,guest_room_allotments.checked_in, guest_room_allotments.check_in_date, guest_room_allotments.check_out_date, guest_room_allotments.id as guest_room_allotment_id, guest_room_allotments.checked_in, rooms.room_no, rooms.id as room_id')) 
+                    ->select(DB::raw('guest_infos.*,guest_room_allotments.checked_in, guest_room_allotments.check_in_date, guest_room_allotments.check_out_date, guest_room_allotments.id as guest_room_allotment_id, guest_room_allotments.checked_in, rooms.room_no, rooms.id as room_id, booking_requests.type_of_guest'))
                     ->orderby('guest_room_allotments.id', 'desc')
                     ->paginate(20);
             }
@@ -108,7 +108,7 @@ class GuestInfoController extends Controller
             }
              $search_form_data_arr = array('from_date'=>$from_date, 'to_date'=>$to_date, 'status'=>$request->status);
             //$search_form_data_arr = $request->all();
-            if((isset($request->to_date))||(isset($request->from_date))||(isset($request->status))) {
+            if(isset($request->status) && $request->status != '') {
                  $guest_info = DB::table('guest_infos')
                     ->join('booking_request_guest_infos', 'guest_infos.id', '=', 'booking_request_guest_infos.guest_info_id')
                     ->join('booking_requests', 'booking_request_guest_infos.booking_request_id', '=', 'booking_requests.id')    
@@ -141,99 +141,6 @@ class GuestInfoController extends Controller
        }
    }
    
-   /**
-    * Display a listing of the resource.
-    *
-    * @return Response
-    */
-   public function FoodPending(request $request)
-   {
-       if(Auth::check()) {
-            $status = 1;
-            
-            $from_date = date('Y/m/d 00:00:00', strtotime('-1 day'));
-            $to_date = date('Y/m/d 23:59:59', strtotime('+1 day'));
-            
-            if(isset($request->from_date) && $request->from_date !=='') {
-                $from_date = $request->from_date .' 00:00:00';
-            }
-
-            if(isset($request->to_date) && $request->to_date !=='') {
-                $to_date = $request->to_date . ' 23:59:59';
-            }
-            
-            if(isset($request->reset)) {
-                $from_date = date('Y/m/d 00:00:00', strtotime('-1 day'));
-                $to_date = date('Y/m/d 23:59:59', strtotime('+1 day'));
-            }
-            
-            $search_form_data_arr = array('from_date'=>$from_date, 'to_date'=>$to_date, 'status'=>1);
-            //$search_form_data_arr = $request->all();
-            
-
-                 $guest_info = DB::table('guest_infos')
-                 ->join('food_booking_guest_infos', 'guest_infos.id', '=', 'food_booking_guest_infos.guest_info_id')
-                 ->join('food_bookings', 'food_booking_guest_infos.food_booking_id','=','food_bookings.id')
-                 ->join('users', 'food_bookings.request_by','=','users.id')
-                 ->where('food_bookings.date','>',$from_date)
-                 ->where('food_bookings.date','<',$to_date)
-                 ->where('food_bookings.status','=', $status)      
-                 ->select(DB::raw('guest_infos.*, food_bookings.date as date, food_bookings.food_type as food_type, food_bookings.id as food_id, users.name as request_by'))
-                 ->orderby('food_bookings.id', 'desc')
-                 ->paginate(20);
- 
-            return view('guest_info.foodpending',compact('guest_info', 'search_form_data_arr'));
-        }else{
-          return  redirect('/login');
-       }
-   }
-   
-   /**
-    * Display a listing of the resource.
-    *
-    * @return Response
-    */
-   public function FoodBookings(request $request)
-   {
-       if(Auth::check()) {
-            $status = 1;
-            
-            $from_date = date('Y/m/d 00:00:00', strtotime('-1 day'));
-            $to_date = date('Y/m/d 23:59:59', strtotime('+1 day'));
-            
-            if(isset($request->from_date) && $request->from_date !=='') {
-                $from_date = $request->from_date .' 00:00:00';
-            }
-
-            if(isset($request->to_date) && $request->to_date !=='') {
-                $to_date = $request->to_date . ' 23:59:59';
-            }
-            
-            if(isset($request->reset)) {
-                $from_date = date('Y/m/d 00:00:00', strtotime('-1 day'));
-                $to_date = date('Y/m/d 23:59:59', strtotime('+1 day'));
-            }
-            
-            $search_form_data_arr = array('from_date'=>$from_date, 'to_date'=>$to_date, 'status'=>1);
-            //$search_form_data_arr = $request->all();
-            
-
-                 $guest_info = DB::table('guest_infos')
-                 ->join('food_booking_guest_infos', 'guest_infos.id', '=', 'food_booking_guest_infos.guest_info_id')
-                 ->join('food_bookings', 'food_booking_guest_infos.food_booking_id','=','food_bookings.id')
-                 ->join('users', 'food_bookings.request_by','=','users.id')
-                 ->where('food_bookings.date','>',$from_date)
-                 ->where('food_bookings.date','<',$to_date)
-                 ->where('food_bookings.status','=', $status)      
-                 ->select(DB::raw('guest_infos.*, food_bookings.date as date, food_bookings.food_type as food_type, food_bookings.id as food_id, users.name as request_by'))
-                 ->orderby('food_bookings.id', 'desc')
-                 ->paginate(20);
- 
-            return view('guest_info.food_bookings',compact('guest_info', 'search_form_data_arr'));
-        }else{
-          return  redirect('/login');
-       }
-   }
    
    /**
     * Display a listing of the resource.
@@ -339,12 +246,10 @@ class GuestInfoController extends Controller
    public function update(Request $request, $id)
    {
        
-       if(!isset($request->served)){
 //      $this->validate($request, [
 //            'finger_print' => 'required|unique:guest_infos|max:255',
 //        ]);  
-       }
-       
+
       $update_guest_info = $request->all();
       if($request->file('doc')){
         $doc = $this->upload($request->file('doc'));
@@ -353,12 +258,7 @@ class GuestInfoController extends Controller
 
       $guest_info = \GuestHouse\guest_info::find($id);
       $guest_info->update($update_guest_info);
-      if($request->served == 1){
-            Flash::message('Food Served');
-            return redirect('/guest_info/foodpending');
-      } else {
-            return redirect('/guest_info/pending');
-      }     
+      return redirect('/guest_info/pending');
    }
    
    /**

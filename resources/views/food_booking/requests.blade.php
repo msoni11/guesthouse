@@ -5,15 +5,12 @@
     <div class="row">
         <div class="col-md-12 ">
             <div class="panel panel-primary">
-                <div class="panel-heading"><h4>Book Food Order</h4></div>   
+                <div class="panel-heading"><h4>Guest House Food Booking Requests</h4></div>
                 <div class="panel-body">
-                    <a href="{{url('/food_booking/create')}}" class="btn btn-success">New Booking</a>
-                    <br>
-                    <br>
                     <div class="panel panel-default">
                     <div class="panel-body">
                         @include('flash::message') 
-                       {!! Form::model($search_form_data_arr, ['url' => 'food_booking', 'method'=>'GET']) !!}
+                       {!! Form::model($search_form_data_arr, ['url' => 'food_booking/requests', 'method'=>'GET']) !!}
                        <div class="form-group form-inline">
                            {!! Form::Label('From Date', 'From Date:') !!}
                            {!! Form::text('from_date', null, ['class'=>'form-control', 'id'=>'from_date'])!!}
@@ -56,27 +53,64 @@
                          <td>{{ $book->date }}</td>
                          <td>
                              @if(is_array(json_decode($book->food_type)))
-                                @foreach(json_decode($book->food_type) as $food)
-                                    {{ ucfirst($food) }}
-                                @endforeach
+                                 @foreach(json_decode($book->food_type) as $food)
+                                     {{ ucfirst($food) }}
+                                 @endforeach
                              @endif
                          </td>
                          <td>{{ $book->purpose }}</td>
                          <td>{{ $book->user_name }}</td>
                          <td>{{ $book->hod_name }}</td>
                          <td> {{ $book->status==3?'Pending from HOD':'' }} {{ $book->status==2?'Pending from Guest owner':'' }} {{ $book->status==1?'Accepted':'' }} {{ $book->status==0?'Rejected':'' }} </td>
+                         @if(in_array('admin',$search_form_data_arr['check_role'])|| in_array('hod',$search_form_data_arr['check_role']))
+                            @if($book->status==3)
+                            <td>
+                                {!! Form::model($food_booking,['method' => 'PATCH','route'=>['food_booking.update',$book->id]]) !!}
+                                <button class="btn btn-primary">Accept</button>
+                                {!! Form::hidden('status',2,null,['class'=>'form-control']) !!}
+                                {!! Form::close() !!} 
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Or
+                                {!! Form::model($food_booking,['method' => 'PATCH','route'=>['food_booking.update',$book->id]]) !!}
+                                <button class="btn btn-primary">Reject</button>
+                                {!! Form::hidden('status',0,null,['class'=>'form-control']) !!}
+                                {!! Form::close() !!}
+                            </td>
+                            @else
+                                <td></td>
+                            @endif
+                         @endif
                          
-                         @if(!in_array('owner',$search_form_data_arr['check_role']))
-                             @if($book->status != 0 && $book->status != 1)
+                         @if(in_array('admin',$search_form_data_arr['check_role'])|| in_array('owner',$search_form_data_arr['check_role']))                         
+
+                            @if($book->status==2)
+                            <td>
+                                {!! Form::model($food_booking,['method' => 'PATCH','route'=>['food_booking.update',$book->id]]) !!}
+                                <button class="btn btn-primary">Accept</button>
+                                {!! Form::hidden('status',1,null,['class'=>'form-control']) !!}
+                                {!! Form::close() !!} 
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Or
+                                {!! Form::model($food_booking,['method' => 'PATCH','route'=>['food_booking.update',$book->id]]) !!}
+                                <button class="btn btn-primary">Reject</button>
+                                {!! Form::hidden('status',0,null,['class'=>'form-control']) !!}
+                                {!! Form::close() !!}
+                            </td>
+                            @else
+                                <td></td>
                             @endif
-                         <td>
-                            {!! Form::open(['method' => 'DELETE', 'route'=>['food_booking.destroy', $book->id]]) !!}
-                            <button class="btn btn-danger">
-                               Delete
-                            </button>
-                            @endif
-                            {!! Form::close() !!}
-                         </td>
+                         @endif
+                         
+                         {{--@if(!in_array('owner',$search_form_data_arr['check_role'])) --}}
+                         {{--@if($book->status==2)--}}
+                            {{--<td><a href="{{route('food_booking.edit',$book->id)}}" class="btn btn-warning">Edit</a></td>--}}
+                         {{--@endif--}}
+                         {{--<td>--}}
+                         {{--{!! Form::open(['method' => 'DELETE', 'route'=>['food_booking.destroy', $book->id]]) !!}--}}
+                         {{--<button class="btn btn-danger">--}}
+                             {{--Delete--}}
+                         {{--</button>--}}
+                         {{--@endif--}}
+                         {{--{!! Form::close() !!}--}}
+                         {{--</td>--}}
                      </tr>
                  @endforeach
 
@@ -96,9 +130,11 @@
                 <script>
                     $(document).ready(function() {             
                      $('#from_date').datetimepicker({
+                            sideBySide: true,
                             format: "YYYY/MM/DD",
                       });
                      $('#to_date').datetimepicker({
+                            sideBySide: true,
                             format: "YYYY/MM/DD",
                       });
                     });
