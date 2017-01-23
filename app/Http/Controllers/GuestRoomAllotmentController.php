@@ -6,6 +6,7 @@ use DB;
 use GuestHouse\guest_room_allotments;
 use GuestHouse\Http\Requests;
 use GuestHouse\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use Laracasts\Flash\Flash;
 use Illuminate\Support\Facades\Mail;
 use GuestHouse\guest_info;
@@ -197,13 +198,18 @@ class GuestRoomAllotmentController extends Controller
      * @return Response
      */
     public function SendCheckoutEmail($guest_room_allotment_id)
-    {   
+    {
         $guest_room_allotment = \GuestHouse\guest_room_allotments::find($guest_room_allotment_id);
-        //dd($guest_room_allotment->guest_info_id);
+
         $boking_request = DB::table('booking_request_guest_infos')->where('guest_info_id', '=', $guest_room_allotment->guest_info_id)->first();
-        //dd($boking_request->booking_request_id);
-        $owner = \GuestHouse\User::findOrFail(24);
-        //dd($boking_request->booking_request_id);
+
+        $owner = DB::table('users')
+            ->leftjoin('role_users','role_users.user_id','=','users.id')
+            ->leftjoin('roles','role_users.role_id','=','roles.id')
+            ->where('users.location','=',Auth::user()->location)
+            ->where('roles.name','=','owner')
+            ->select(DB::raw('users.*'))->first();
+
         $users = \GuestHouse\booking_request::find($boking_request->booking_request_id)->user()->first();
         $booking_request = \GuestHouse\booking_request::find($boking_request->booking_request_id);
        
