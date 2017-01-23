@@ -86,11 +86,11 @@ class FoodServedController extends Controller
     * 
     * @return type
     */
-    public function Edit($id){
-       $foodserved = \GuestHouse\food_served::find($id); 
+    public function Edit($id, Request $request){
+       $foodserved = \GuestHouse\food_served::find($id);
        $users = \GuestHouse\guest_info::lists('name', 'id');
        $foods = \GuestHouse\food::lists('name', 'id');
-       return view('foodserved.edit', compact('foodserved','users', 'foods'));
+       return view('foodserved.edit', compact('foodserved','users', 'foods', 'request'));
     }//function
     //-----------------------------------------------------------------------------------------
     
@@ -106,6 +106,9 @@ class FoodServedController extends Controller
         $food = \GuestHouse\food::find($foodserved->food_id);
         $foodserved->price = $food->price;
         $foodserved->save();
+        if ($request->guestroomallotmentid) {
+            return redirect('/guestroomallotment/'. $request->guestroomallotmentid);
+        }
         return redirect('foodserved');
     }
     
@@ -114,8 +117,11 @@ class FoodServedController extends Controller
      * @param type $id
      * @return type
      */
-    public function Destroy($id){
+    public function Destroy($id, Request $request){
         \GuestHouse\food_served::find($id)->delete();
+        if ($request->guestroomallotmentid) {
+            return redirect('/guestroomallotment/'. $request->guestroomallotmentid);
+        }
         return redirect('foodserved');
     }
 
