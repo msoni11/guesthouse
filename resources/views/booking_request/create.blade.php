@@ -123,7 +123,6 @@
                         {!! Form::text('address[<% $index + 1 %>]',null,['class'=>'form-control']) !!}
 
                     </div>
-                    </div>
                     <div class="form-group form-inline">
                         {!! Form::label('Attach Document', 'Attach Document:') !!}
                             <span style="color:red">*</span>
@@ -133,7 +132,7 @@
                                 <span class="file-custom"></span>
                         </label>
                     </div>
-
+                </div>
                 <div class="form-group form-inline">
                     <div class="row">
                       <div class="col-md-4">
