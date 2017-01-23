@@ -82,13 +82,6 @@
                 </table>
                 @endif
 
-                <div class="form-group">
-                    <div class="col-sm-offset-2 col-sm-10">
-                        <a href="{{ url('/guest_info/pending')}}" class="btn btn-primary">Back</a>
-                    </div>
-                </div>
-
-
                 @if($guestroom->checked_in == 1)
                     <div class="col-md-6">
                         <div id="my_camera"></div>
@@ -120,8 +113,6 @@
                             <a href="{{ url('/guest_info/pending')}}" class="btn btn-primary">Back</a>
                         </div>
                     </div>
-                </form>
-
                 <hr>
             </div>
             @if($guestroom->checked_in == 1)
