@@ -30,9 +30,10 @@ class FoodServedController extends Controller
     *  crate form
     */
    public function Create(Request $request){
-       $users = DB::table('guest_infos')
-                ->join('guest_room_allotments', 'guest_infos.id', '=', 'guest_room_allotments.guest_info_id')
-                ->where('guest_room_allotments.checked_in', '=', 1)->lists('guest_infos.name', 'guest_infos.id');
+//       $users = DB::table('guest_infos')
+//                ->join('guest_room_allotments', 'guest_infos.id', '=', 'guest_room_allotments.guest_info_id')
+//                ->where('guest_room_allotments.checked_in', '=', 1)
+//                ->lists('guest_infos.name', 'guest_infos.id');
        
        $foodserved = DB::table('food_serveds')
                ->join('guest_infos', 'food_serveds.guest_info_id', '=', 'guest_infos.id')
@@ -42,9 +43,12 @@ class FoodServedController extends Controller
                ->paginate(15);
        //dd($users);
        //$users = \GuestHouse\guest_info::lists('name', 'id');
-       $user_id = $request->user_id;
+       $userid = $request->user_id;
+       $user = \GuestHouse\guest_info::find($userid);
+
        $foods = \GuestHouse\food::lists('name', 'id');
-       return view('foodserved.create', compact('users', 'foods', 'user_id', 'foodserved'));
+
+       return view('foodserved.create', compact('foods', 'user', 'foodserved'));
    }//function
    
    /**
@@ -73,6 +77,7 @@ class FoodServedController extends Controller
     * @param \Illuminate\Http\Request $request
     */
    public function Store(Request $request){
+       //dd($request);die;
        $foodserveds = $request->all();
        $res = \GuestHouse\food_served::create($foodserveds);
        $food = \GuestHouse\food::find($res->food_id);
@@ -100,6 +105,7 @@ class FoodServedController extends Controller
      * @param type $id
      */
     public function update(Request $request, $id){
+
         $all_data = $request->all();
         $foodserved = \GuestHouse\food_served::find($id);
         $foodserved->update($all_data);

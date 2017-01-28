@@ -18,8 +18,8 @@
                 <div class="form-group  form-inline">
                     <div class="row">
                         <div class="col-md-3">
-                        {!! Form::label('Guest Name', 'Guest Name:') !!}
-                        {!! Form::select('guest_info_id',$users, $user_id,['class'=>'form-control']) !!}
+                        {!! Form::label('Guest Name', 'Guest Name:') !!} : {{$user->name}}
+                        {!! Form::hidden('guest_info_id',$user->id) !!}
                         </div>
                         <div class="col-md-3">
                         {!! Form::label('Food Name', 'Food Name:') !!}
