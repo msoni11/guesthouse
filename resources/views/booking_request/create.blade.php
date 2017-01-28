@@ -61,7 +61,7 @@
                     <div class="col-md-4">
 
                         {!! Form::label('Food Order', 'Food Order:') !!}
-                        <span style="color:red">*</span>
+
                         {!! Form::checkbox('food_order[]','break-fast',null,['class'=>'form-control']) !!}
                         {!! Form::label('', 'Break Fast') !!}
                         {!! Form::checkbox('food_order[]','lunch',null,['class'=>'form-control']) !!}

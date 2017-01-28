@@ -23,7 +23,7 @@ class BookingRequestController extends Controller
     * @return Response
     */
    public function index(Request $request)
-   {
+   {    //dd($request);die;
        $status = '';
        $booking_request = array();
        $from_date = date('Y/m/d 00:00:00', strtotime('-10 day'));
@@ -57,22 +57,25 @@ class BookingRequestController extends Controller
                     ->wherebetween('booking_requests.created_at', [$from_date, $to_date])
                     ->select(DB::raw('booking_requests.*, users.name as user_name, huser.name as hod_name'))
                     ->paginate(10);
-                // dd($booking_request);
+                //dd($booking_request);
 
             } else { 
                      $booking_request = DB::table('booking_requests')
                     ->leftjoin('users', 'users.id', '=', 'booking_requests.request_by')
                     ->leftjoin('users as huser', 'huser.id', '=', 'booking_requests.hod_id')
+                    ->leftjoin('booking_request_guest_infos','booking_request_guest_infos.booking_request_id','=','booking_requests.id')
+                    ->leftjoin('guest_infos','guest_infos.id','=','booking_request_guest_infos.guest_info_id')
+                    ->leftjoin('guest_room_allotments','guest_room_allotments.guest_info_id','=','guest_infos.id')
                     ->where('booking_requests.request_by', '=', Auth::user()->id)          
                     ->wherebetween('booking_requests.created_at', [$from_date, $to_date])
-                    ->select(DB::raw('booking_requests.*, users.name as user_name, huser.name as hod_name'))
+                    ->select(DB::raw('booking_requests.*, users.name as user_name, huser.name as hod_name,guest_room_allotments.checked_in ,guest_room_allotments.guest_info_id as r_id'))
                     ->paginate(10);
                      //dd($booking_request);
             }
        } else {
           return  redirect('/login');
        }
-       
+
        return view('booking_request.index',compact('booking_request'), compact('search_form_data_arr'));
        
    }
@@ -93,6 +96,7 @@ class BookingRequestController extends Controller
         ->where('users.id', '!=', Auth::user()->id)
         ->where('roles.name', '=', 'hod')
         ->lists('users.name', 'users.id');
+       //dd($request);die;
       return view('booking_request.create', compact('curruser'), compact('hods'));
    }
    /**
@@ -105,13 +109,12 @@ class BookingRequestController extends Controller
        if ($request->get('type_of_guest') !== 'guestof') {
            $valids = [
                'no_of_visitors' => 'required',
-               'check_in_date' => 'required|after:tomorrow',
+               'check_in_date' => 'required|after:today',
                'check_out_date' => 'required|after:check_in_date',
                'name.*' => 'required',
                'contact_no.*' => 'required|digits_between:9,12',
                'required_room' => 'required',
                'type_of_guest' => 'required',
-               'food_order'    => 'required',
                'org_name_address'  => 'required',
                'purpose'       =>  'required|string',
                'remark'        =>  'required|string',
@@ -122,11 +125,10 @@ class BookingRequestController extends Controller
        } else {
            $valids = [
                'no_of_visitors' => 'required',
-               'check_in_date' => 'required|after:tomorrow',
+               'check_in_date' => 'required|after:today',
                'check_out_date' => 'required|after:check_in_date',
                'required_room' => 'required',
                'type_of_guest' => 'required',
-               'food_order'    => 'required',
                'org_name_address'  => 'required',
                'purpose'       =>  'required|string',
                'remark'        =>  'required|string'
@@ -292,7 +294,8 @@ class BookingRequestController extends Controller
     * @return Response
     */
    public function UpdateStatusByOwner(Request $request, $id)
-   {        
+   {
+
       $update_booking_request = array('email_key'=>'', 'status'=>$request->status);
       $booking_request = \GuestHouse\booking_request::find($id);
       
