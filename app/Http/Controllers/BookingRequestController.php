@@ -86,6 +86,18 @@ class BookingRequestController extends Controller
     */
    public function create(request $request)
    {
+       $old_data = $request->old();
+       $no_of_visitors = false;
+       $type_of_guest = false;
+
+       if ($old_data) {
+           if(isset($old_data['no_of_visitors'])) {
+               $no_of_visitors = $old_data['no_of_visitors'];
+           }
+           if(isset($old_data['type_of_guest'])) {
+               $type_of_guest = $old_data['type_of_guest'];
+           }
+       }
       $users = \GuestHouse\User::lists('name', 'id');
       $user = new \GuestHouse\User;
       $curruser = Auth::user();
@@ -97,7 +109,7 @@ class BookingRequestController extends Controller
         ->where('roles.name', '=', 'hod')
         ->lists('users.name', 'users.id');
        //dd($request);die;
-      return view('booking_request.create', compact('curruser'), compact('hods'));
+      return view('booking_request.create', compact('curruser', 'hods', 'old_data', 'no_of_visitors', 'type_of_guest'));
    }
    /**
     * Store a newly created resource in storage.
