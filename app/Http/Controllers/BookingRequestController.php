@@ -63,12 +63,9 @@ class BookingRequestController extends Controller
                      $booking_request = DB::table('booking_requests')
                     ->leftjoin('users', 'users.id', '=', 'booking_requests.request_by')
                     ->leftjoin('users as huser', 'huser.id', '=', 'booking_requests.hod_id')
-                    ->leftjoin('booking_request_guest_infos','booking_request_guest_infos.booking_request_id','=','booking_requests.id')
-                    ->leftjoin('guest_infos','guest_infos.id','=','booking_request_guest_infos.guest_info_id')
-                    ->leftjoin('guest_room_allotments','guest_room_allotments.guest_info_id','=','guest_infos.id')
-                    ->where('booking_requests.request_by', '=', Auth::user()->id)          
+                    ->where('booking_requests.request_by', '=', Auth::user()->id)
                     ->wherebetween('booking_requests.created_at', [$from_date, $to_date])
-                    ->select(DB::raw('booking_requests.*, users.name as user_name, huser.name as hod_name,guest_room_allotments.checked_in ,guest_room_allotments.guest_info_id as r_id'))
+                    ->select(DB::raw('booking_requests.*, users.name as user_name, huser.name as hod_name'))
                     ->paginate(10);
                      //dd($booking_request);
             }
