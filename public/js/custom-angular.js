@@ -6,6 +6,7 @@ guest_house.controller('guestCtr', function($scope, $http){
     $scope.no_of_visitors = '';
     $scope.type_of_guest = '';
     $scope.guestofname = '';
+    $scope.extendUsers = false;
 
     var config = {
             headers : {
@@ -16,7 +17,7 @@ guest_house.controller('guestCtr', function($scope, $http){
         $scope.no_of_visitors = val;
     }
     $scope.changeVisitors = function(){
-        console.log($scope.no_of_visitors);
+        $scope.extendUsers = true;
     }
 
     $scope.onGuestTypeChange = function(fname) {

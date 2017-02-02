@@ -46,7 +46,7 @@
                     <tr>
                         <th>Food Item Name</th>
                         <th>Food Quantity</th>
-                        <th>Food Price(per Unit)</th>
+                        {{--<th>Food Price(per Unit)</th>--}}
                         <th colspan="2">Actions</th>
                     </tr>
                     
@@ -54,7 +54,7 @@
                 <tr>
                     <td>{{$food->name}}</td>
                     <td>{{$food->quantity}}</td>
-                    <td>{{$food->price}}</td>
+                    {{--<td>{{$food->price}}</td>--}}
                     @if($guestroom->checked_in == 1)
                         <td>
                             <a href="{{route('foodserved.edit', array('id' => $food->id, 'guestroomallotmentid' => $guestroom->id))}}" class="btn btn-warning"><span aria-hidden="true" class="glyphicon glyphicon-pencil"></span></a>
@@ -73,12 +73,12 @@
                 <div style="display:none"> {!! $total_price += ($food->quantity*$food->price) !!}</div>
                 </tr>
                 @endforeach
-                <tr>
-                    <td></td>
-                    <td><strong>Total</strong>(in Rs)</td>
-                    <td>{{$total_price}}</td>
-                    <td colspan="2"></td>
-                </tr>
+                {{--<tr>--}}
+                    {{--<td></td>--}}
+                    {{--<td><strong>Total</strong>(in Rs)</td>--}}
+                    {{--<td>{{$total_price}}</td>--}}
+                    {{--<td colspan="2"></td>--}}
+                {{--</tr>--}}
                 </table>
                 @endif
 
