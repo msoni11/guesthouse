@@ -36,7 +36,7 @@
 
                           {!! Form::label('Type of Guest', 'Type of Guest:') !!}
                             <span style="color:red">*</span>
-                          {!! Form::select('type_of_guest',[''=>'Select','visitor'=>'Visitor', 'employee'=>'Employee', 'contractor'=>'Contractor', 'guestof'=>'Guest of'],null,['class'=>'form-control', 'ng-model'=>'type_of_guest', 'ng-init'=>"type_of_guest='$type_of_guest'", "ng-change" => "onGuestTypeChange('$curruser->name')" ]) !!}
+                          {!! Form::select('type_of_guest',[''=>'Select','visitor'=>'Visitor', 'employee'=>'Employee', 'contractor'=>'Contractor', 'guestof'=>'Guest of'],null,['class'=>'form-control', 'ng-model'=>'type_of_guest', 'ng-init'=>"type_of_guest='$type_of_guest'"]) !!}
                           {!! Form::text('po_no',null,['class'=>'form-control ng-hide', 'ng-show' => "type_of_guest == 'contractor'"]) !!}
 
                       </div>
@@ -111,7 +111,7 @@
 
                                     {!! Form::label('Guest Name', 'Guest Name:') !!}
                                     <span style="color:red">*</span>
-                                    {!! Form::text("name[$k]", null, ['class'=>'form-control', 'ng-model'=>'guestofname', 'ng-init'=> "guestofname='$v'"]) !!}
+                                    {!! Form::text("name[$k]", $v, ['class'=>'form-control guestofname']) !!}
 
                                     {!! Form::label('Guest Contact No', 'Guest Contact No:') !!}
                                     <span style="color:red">*</span>
@@ -144,7 +144,12 @@
 
                                     {!! Form::label('Guest Name', 'Guest Name:') !!}
                                     <span style="color:red">*</span>
-                                    {!! Form::text('name[<% $index + 1 %>]',null,['class'=>'form-control', 'ng-model'=>'guestofname']) !!}
+                                    <span ng-if="type_of_guest == 'guestof'">
+                                        {!! Form::text('name[<% $index + 1 %>]', ("Guest of ". $curruser->name),['class'=>'form-control guestofname']) !!}
+                                    </span>
+                                    <span ng-if="type_of_guest != 'guestof'">
+                                        {!! Form::text('name[<% $index + 1 %>]', null,['class'=>'form-control guestofname']) !!}
+                                    </span>
 
 
                                     {!! Form::label('Guest Contact No', 'Guest Contact No:') !!}
@@ -180,7 +185,12 @@
 
                             {!! Form::label('Guest Name', 'Guest Name:') !!}
                             <span style="color:red">*</span>
-                            {!! Form::text('name[<% $index + 1 %>]',null,['class'=>'form-control', 'ng-model'=>'guestofname']) !!}
+                            <span ng-if="type_of_guest == 'guestof'">
+                                {!! Form::text('name[<% $index + 1 %>]', ("Guest of ". $curruser->name),['class'=>'form-control guestofname']) !!}
+                            </span>
+                            <span ng-if="type_of_guest != 'guestof'">
+                                {!! Form::text('name[<% $index + 1 %>]', null,['class'=>'form-control guestofname']) !!}
+                            </span>
 
 
                             {!! Form::label('Guest Contact No', 'Guest Contact No:') !!}

@@ -5,7 +5,6 @@ var guest_house =  angular.module('guest_house', [], function($interpolateProvid
 guest_house.controller('guestCtr', function($scope, $http){
     $scope.no_of_visitors = '';
     $scope.type_of_guest = '';
-    $scope.guestofname = '';
     $scope.extendUsers = false;
 
     var config = {
@@ -18,14 +17,6 @@ guest_house.controller('guestCtr', function($scope, $http){
     }
     $scope.changeVisitors = function(){
         $scope.extendUsers = true;
-    }
-
-    $scope.onGuestTypeChange = function(fname) {
-        if ($scope.type_of_guest == 'guestof') {
-            $scope.guestofname = 'Guest of ' +fname;
-        } else {
-            $scope.guestofname = '';
-        }
     }
 
 });
