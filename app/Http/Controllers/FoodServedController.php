@@ -83,7 +83,10 @@ class FoodServedController extends Controller
        $food = \GuestHouse\food::find($res->food_id);
        $res->price = $food->price;
        $res->save();
-       return redirect('/foodserved');
+       if ($request->guest_info_id) {
+           return redirect('/foodserved/create?user_id='.$request->guest_info_id);
+       }
+       //return redirect('/foodserved');
    }//function
    //-------------------------------------------------------------------------------------------
    
@@ -128,7 +131,7 @@ class FoodServedController extends Controller
         if ($request->guestroomallotmentid) {
             return redirect('/guestroomallotment/'. $request->guestroomallotmentid);
         }
-        return redirect('foodserved');
+        return redirect('/foodserved/create?user_id='.$request->guest_info_id);
     }
 
 }
