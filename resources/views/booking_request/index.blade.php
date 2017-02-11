@@ -17,7 +17,7 @@
                        <div class="form-group form-inline">
                            {!! Form::Label('From Date', 'From Date:') !!}
                            {!! Form::text('from_date', null, ['class'=>'form-control', 'id'=>'from_date'])!!}
-                      
+
                            {!! Form::Label('To Date', 'To Date:') !!}
                            {!! Form::text('to_date', null, ['class'=>'form-control', 'id'=>'to_date'])!!}       
                            
@@ -73,16 +73,21 @@
                          <td> {{ $book->status==3?'Pending from HOD':'' }} {{ $book->status==2?'Pending from Guest owner':'' }} {{ $book->status==1?'Accepted':'' }} {{ $book->status==0?'Rejected':'' }} </td>
                          <td><a href="{{url('booking_request',$book->id)}}" class="btn btn-primary">Details</a></td>
 
-                         @if(!in_array('owner',$search_form_data_arr['check_role'])) 
-                         @if($book->status != 0 && $book->status != 1)
-
+                         @if(!in_array('owner',$search_form_data_arr['check_role']))
+                             @if($book->status != 0 && $book->status != 1)
                          @endif
                          <td>
-                         {!! Form::open(['method' => 'DELETE', 'route'=>['booking_request.destroy', $book->id]]) !!}
-                         <button class="btn btn-danger">
-                             Delete
-                         </button>
-                         @endif
+
+                             @if( $book->checked_in == 1 || $book->checked_in == 2)
+                                 <a href="{{url('extend_booking?id='.$book->id)}}" class="btn btn-primary">Extend</a>
+
+                             @elseif($book->checked_in == 0)
+                                 {!! Form::open(['method' => 'DELETE', 'route'=>['booking_request.destroy', $book->id]]) !!}
+                                 <button class="btn btn-danger">
+                                     Delete
+                                 </button>
+                             @endif
+                             @endif
                          {!! Form::close() !!}
                          </td>
                      </tr>
