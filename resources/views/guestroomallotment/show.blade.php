@@ -6,7 +6,7 @@
             <div class="panel-heading panel-primary">Guest Check In & Out Detail</div>
             <div class="panel-body">
                 <form class="form-horizontal">
-                @foreach ($guestroomallotment as $guestroom)    
+                @foreach ($guestroomallotment as $guestroom)
                 <div class="form-group">
                     <label for="name" class="col-sm-2 control-label">Guest Name</label>
                     <div class="col-sm-10">
@@ -46,7 +46,7 @@
                     <tr>
                         <th>Food Item Name</th>
                         <th>Food Quantity</th>
-                        {{--<th>Food Price(per Unit)</th>--}}
+                        <th>Food Price(per Unit)</th>
                         <th colspan="2">Actions</th>
                     </tr>
                     
@@ -54,7 +54,7 @@
                 <tr>
                     <td>{{$food->name}}</td>
                     <td>{{$food->quantity}}</td>
-                    {{--<td>{{$food->price}}</td>--}}
+                    <td>{{$food->price}}</td>
                     @if($guestroom->checked_in == 1)
                         <td>
                             <a href="{{route('foodserved.edit', array('id' => $food->id, 'guestroomallotmentid' => $guestroom->id))}}" class="btn btn-warning"><span aria-hidden="true" class="glyphicon glyphicon-pencil"></span></a>
@@ -73,21 +73,18 @@
                 <div style="display:none"> {!! $total_price += ($food->quantity*$food->price) !!}</div>
                 </tr>
                 @endforeach
-                {{--<tr>--}}
-                    {{--<td></td>--}}
-                    {{--<td><strong>Total</strong>(in Rs)</td>--}}
-                    {{--<td>{{$total_price}}</td>--}}
-                    {{--<td colspan="2"></td>--}}
-                {{--</tr>--}}
+                <tr>
+                    <td></td>
+                    <td><strong>Total</strong>(in Rs)</td>
+                    <td>{{$total_price}}</td>
+                    <td colspan="2"></td>
+                </tr>
                 </table>
                 @endif
 
                 @if($guestroom->checked_in == 1)
                     <div class="col-md-6">
                         <div id="my_camera"></div>
-                       {{-- <form>
-                            <input type=button value="Take Guest Photo Snapshot" onClick="take_snapshot()">
-                        </form>--}}
                     </div>
 
                 {!! Form::open(['method' => 'PATCH', 'route'=>['guestroomallotment.update', $guestroom->id]]) !!}
@@ -112,8 +109,8 @@
                         </div>
                     </div>
                 {!! Form::close() !!}
-                @endif
-{{--
+
+
 
                 {!! Form::open(['method' => 'GET', 'route'=>['ApproveByEmail']])  !!}
                 {!! Form::hidden('user_id',$guestroom->id) !!}
@@ -123,8 +120,7 @@
                     {!! Form::close() !!}
                     <hr>
                 </div>
---}}
-
+                @endif
             @if($guestroom->checked_in == 1)
             <script language="JavaScript">
                 Webcam.set({
