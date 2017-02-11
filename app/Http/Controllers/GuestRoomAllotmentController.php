@@ -35,6 +35,10 @@ class GuestRoomAllotmentController extends Controller
      *
      * @return type
      */
+
+
+
+
     public function ShowCheckOut()
     {
         $guestroomallotment = DB::table('guest_room_allotments')
@@ -153,32 +157,36 @@ class GuestRoomAllotmentController extends Controller
      * @param  int $id
      * @return Response
      */
-    public function show($id)
+    public function show(Request $request,$id)
     {
-        $guestroomallotment = DB::table('guest_room_allotments')
-            ->join('guest_infos', 'guest_room_allotments.guest_info_id', '=', 'guest_infos.id')
-            ->join('rooms', 'guest_room_allotments.room_id', '=', 'rooms.id')
-            ->where('guest_room_allotments.id', '=', $id)
-            ->select(DB::raw('guest_room_allotments.*, guest_infos.name, rooms.room_no, rooms.room_type'))
-            ->paginate(1);
 
-        //dd($guestroomallotment[0]->guest_info_id);
-        if (isset($guestroomallotment[0])) {
-            $foods = DB::table('food_serveds')
-                ->join('foods', 'food_serveds.food_id', '=', 'foods.id')
-                ->where('food_serveds.guest_info_id', '=', $guestroomallotment[0]->guest_info_id)
+        {
+            $guestroomallotment = DB::table('guest_room_allotments')
+                ->join('guest_infos', 'guest_room_allotments.guest_info_id', '=', 'guest_infos.id')
+                ->join('rooms', 'guest_room_allotments.room_id', '=', 'rooms.id')
+                ->where('guest_room_allotments.id', '=', $id)
+                ->select(DB::raw('guest_room_allotments.*, guest_infos.name, rooms.room_no, rooms.room_type'))
+                ->paginate(1);
+
+            //dd($guestroomallotment[0]->guest_info_id);
+            if (isset($guestroomallotment[0])) {
+                $foods = DB::table('food_serveds')
+                    ->join('foods', 'food_serveds.food_id', '=', 'foods.id')
+                    ->where('food_serveds.guest_info_id', '=', $guestroomallotment[0]->guest_info_id)
 //                ->wherebetween('food_serveds.created_at', [$guestroomallotment[0]->check_in_date, $guestroomallotment[0]->check_out_date])
-                ->select(DB::raw('food_serveds.*, foods.name as name'))
-                ->get();
-        }
+                    ->select(DB::raw('food_serveds.*, foods.name as name'))
+                    ->get();
+            }
 
-        $guest_info = DB::table('guest_infos')
-            ->join('guest_room_allotments', 'guest_room_allotments.guest_info_id', '=', 'guest_infos.id')
-            ->where('guest_room_allotments.id', '=', $id)
-            ->select(DB::raw('guest_infos.*,guest_room_allotments.id as r_id'))->first();
-        //dd($guest_info);die;
-        return view('guestroomallotment.show', compact('guestroomallotment', 'foods', 'guest_info'));
-    }
+            $guest_info = DB::table('guest_infos')
+                ->join('guest_room_allotments', 'guest_room_allotments.guest_info_id', '=', 'guest_infos.id')
+                ->where('guest_room_allotments.id', '=', $id)
+                ->select(DB::raw('guest_infos.*,guest_room_allotments.id as r_id'))->first();
+            //dd($guest_info);die;
+            return view('guestroomallotment.show', compact('guestroomallotment', 'foods', 'guest_info'));
+
+        }
+        }
 
     /**
      *
@@ -239,5 +247,70 @@ class GuestRoomAllotmentController extends Controller
         });
     }//function
     //---------------------------------------------------------------------------------------------------------------------
+
+    /**
+     * Send an e-mail reminder to the user.
+     *
+     * @param  Request  $request
+     * @param  int  $id
+     * @return Response
+     */
+
+
+   public function ApproveByEmail(Request $request)
+    {
+        //dd($request);die;
+        if (Auth::check())
+        {
+            $guest_room_allotment_id = $request->user_id;
+            $guest_info = \GuestHouse\guest_info::find($request->guest_info_id);
+            //dd($guest_info);die;
+            $guest_room_allotment = \GuestHouse\guest_room_allotments::find($guest_room_allotment_id);
+
+            $boking_request = DB::table('booking_request_guest_infos')->where('guest_info_id', '=', $guest_room_allotment->guest_info_id)->first();
+
+            $users = \GuestHouse\booking_request::find($boking_request->booking_request_id)->user()->first();
+
+            $booking_request = \GuestHouse\booking_request::find($boking_request->booking_request_id);
+
+            $guestroomallotment = DB::table('guest_room_allotments')
+                ->join('guest_infos', 'guest_room_allotments.guest_info_id', '=', 'guest_infos.id')
+                ->join('rooms', 'guest_room_allotments.room_id', '=', 'rooms.id')
+                ->where('guest_room_allotments.id', '=', $guest_room_allotment_id)
+                ->paginate(1);
+
+            $foods = DB::table('food_serveds')
+                ->join('foods', 'food_serveds.food_id', '=', 'foods.id')
+                ->where('food_serveds.guest_info_id', '=', $guestroomallotment[0]->guest_info_id)
+                ->wherebetween('food_serveds.created_at', [$guestroomallotment[0]->check_in_date, $guestroomallotment[0]->check_out_date])
+                ->select(DB::raw('food_serveds.*, foods.name as name'))
+                ->get();
+
+            $user_info = DB::table('users')
+                ->leftjoin('role_users', 'role_users.user_id', '=', 'users.id')
+                ->leftjoin('roles', 'role_users.role_id', '=', 'roles.id')
+                ->where('users.location', '=', Auth::user()->location)
+                ->where('roles.name', '=', 'employee')
+                ->select(DB::raw('users.*'))->first();
+
+            $links = ['accept' => url('/guest_info/updatebypasscheckout/?id=' . $guest_room_allotment_id . '&status=1' . '&user_id=' . $user_info->id), 'reject' => url('/guest_info/updatebypasscheckout/?id=' . $guest_room_allotment_id . '&status=0'.'&user_id=' . $user_info->id)];
+
+            $emails = [$users->email];
+            $mail = Mail::send('emails.checkout_approve', ['users' => $users, 'booking_request' => $booking_request, 'guest_info' => $guest_info, 'foods' => $foods, 'links' => $links], function ($m) use ($emails) {
+                $m->from('support@hzl.com', 'GHMS Team');
+                $m->to($emails)->subject('Guest Check Out Details');
+            });
+        }
+        return redirect('/booking_request/');
+    }//function
+    //---------------------------------------------------------------------------------------------------------------------
+
+    /**
+     * Send an e-mail reminder to the user.
+     *
+     * @param  Request  $request
+     * @param  int  $id
+     * @return Response
+     */
 
 }
