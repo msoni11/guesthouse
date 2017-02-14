@@ -22,7 +22,7 @@
 
                                 {!! Form::label('No. of visitors', 'No. of visitors:') !!}
                             <span style="color:red">*</span>
-                        {!! Form::select('no_of_visitors',[''=>'Select', 1=>1,2=>2,3=>3,4=>4,5=>5,6=>6,7=>7,8=>8,9=>9,10=>10],null,['class'=>'form-control', 'ng-model'=>'no_of_visitors', 'ng-change'=>'changeVisitors()']) !!}
+                        {!! Form::select('no_of_visitors',[''=>'Select', 1=>1,2=>2,3=>3,4=>4,5=>5,6=>6,7=>7,8=>8,9=>9,10=>10],null,['class'=>'form-control', "ng-model"=>"no_of_visitors", "ng-init"=>"no_of_visitors='$no_of_visitors'", 'ng-change'=>'changeVisitors()']) !!}
 
                         </div>
                       <div class="col-md-4">
@@ -36,7 +36,7 @@
 
                           {!! Form::label('Type of Guest', 'Type of Guest:') !!}
                             <span style="color:red">*</span>
-                          {!! Form::select('type_of_guest',[''=>'Select','visitor'=>'Visitor', 'employee'=>'Employee', 'contractor'=>'Contractor', 'guestof'=>'Guest of'],null,['class'=>'form-control', 'ng-model'=>'type_of_guest', 'ng-init'=>"type_of_guest == 'visitor'", "ng-change" => "onGuestTypeChange('$curruser->name')" ]) !!}
+                          {!! Form::select('type_of_guest',[''=>'Select','visitor'=>'Visitor', 'employee'=>'Employee', 'contractor'=>'Contractor', 'guestof'=>'Guest of'],null,['class'=>'form-control', 'ng-model'=>'type_of_guest', 'ng-init'=>"type_of_guest='$type_of_guest'"]) !!}
                           {!! Form::text('po_no',null,['class'=>'form-control ng-hide', 'ng-show' => "type_of_guest == 'contractor'"]) !!}
 
                       </div>
@@ -61,7 +61,7 @@
                     <div class="col-md-4">
 
                         {!! Form::label('Food Order', 'Food Order:') !!}
-                        <span style="color:red">*</span>
+
                         {!! Form::checkbox('food_order[]','break-fast',null,['class'=>'form-control']) !!}
                         {!! Form::label('', 'Break Fast') !!}
                         {!! Form::checkbox('food_order[]','lunch',null,['class'=>'form-control']) !!}
@@ -100,39 +100,125 @@
                 <div class="form-group">
                     {!! Form::hidden('status',3,null,['class'=>'form-control']) !!}
                 </div>
-                <div ng-repeat="n in [] | range:no_of_visitors">
-                     <hr>  
-                    <div class="form-group form-inline">
-                        <% $index + 1 %>)
 
-                        {!! Form::label('Guest Name', 'Guest Name:') !!}
-                        <span style="color:red">*</span>
-                        {!! Form::text('name[<% $index + 1 %>]',null,['class'=>'form-control', 'ng-model'=>'guestofname']) !!}
+                @if($old_data)
+                    @if(isset($old_data['name']))
+                        <div ng-if="!extendUsers">
+                            @foreach($old_data['name'] as $k => $v)
+                                <hr>
+                                <div class="form-group form-inline">
+                                    {{$k}})
+
+                                    {!! Form::label('Guest Name', 'Guest Name:') !!}
+                                    <span style="color:red">*</span>
+                                    {!! Form::text("name[$k]", $v, ['class'=>'form-control guestofname']) !!}
+
+                                    {!! Form::label('Guest Contact No', 'Guest Contact No:') !!}
+                                    <span style="color:red">*</span>
+                                    {!! Form::text("contact_no[$k]", $old_data['contact_no'][$k], ['class'=>'form-control']) !!}
+
+                                    {!! Form::label('Guest Email', 'Guest Email:') !!}
+                                    {!! Form::text("email[$k]", $old_data['email'][$k], ['class'=>'form-control']) !!}
+
+                                    {!! Form::label('Guest Address', 'Guest Address:') !!}
+                                    <span style="color:red">*</span>
+                                    {!! Form::text("address[$k]", $old_data['address'][$k], ['class'=>'form-control']) !!}
+                                </div>
+                                <div class="form-group form-inline">
+                                    {!! Form::label('Attach Document', 'Attach Document:') !!}
+                                    <span style="color:red">*</span>
+                                    {!! Form::select("document_type[$k]", ['' => 'Select', 'Company Employee ID Card'=>'Company Employee ID Card','Voter Photo ID'=>'Voter Photo ID','Driving License'=>'Driving License','Passport'=>'Passport'], $old_data['document_type'][$k], ['class'=>'form-control']) !!}
+                                    <label class="file" class="form-control">
+                                        <input type="file" name="doc[{{$k}}]" id="file">
+                                        <span class="file-custom"></span>
+                                    </label>
+                                </div>
+                            @endforeach
+                        </div>
+                        {{--user has changed no of visitors again --}}
+                        <div ng-if="extendUsers">
+                            <div ng-repeat="n in [] | range:no_of_visitors">
+                                <hr>
+                                <div class="form-group form-inline">
+                                    <% $index + 1 %>)
+
+                                    {!! Form::label('Guest Name', 'Guest Name:') !!}
+                                    <span style="color:red">*</span>
+                                    <span ng-if="type_of_guest == 'guestof'">
+                                        {!! Form::text('name[<% $index + 1 %>]', ("Guest of ". $curruser->name),['class'=>'form-control guestofname']) !!}
+                                    </span>
+                                    <span ng-if="type_of_guest != 'guestof'">
+                                        {!! Form::text('name[<% $index + 1 %>]', null,['class'=>'form-control guestofname']) !!}
+                                    </span>
 
 
-                        {!! Form::label('Guest Contact No', 'Guest Contact No:') !!}
-                        <span style="color:red">*</span>
-                        {!! Form::text('contact_no[<% $index + 1 %>]',null,['class'=>'form-control']) !!}
+                                    {!! Form::label('Guest Contact No', 'Guest Contact No:') !!}
+                                    <span style="color:red">*</span>
+                                    {!! Form::text('contact_no[<% $index + 1 %>]',null,['class'=>'form-control']) !!}
 
-                        {!! Form::label('Guest Email', 'Guest Email:') !!}
-                        {!! Form::text('email[<% $index + 1 %>]',null,['class'=>'form-control']) !!}
+                                    {!! Form::label('Guest Email', 'Guest Email:') !!}
+                                    {!! Form::text('email[<% $index + 1 %>]',null,['class'=>'form-control']) !!}
 
 
-                        {!! Form::label('Guest Address', 'Guest Address:') !!}
-                        <span style="color:red">*</span>
-                        {!! Form::text('address[<% $index + 1 %>]',null,['class'=>'form-control']) !!}
+                                    {!! Form::label('Guest Address', 'Guest Address:') !!}
+                                    <span style="color:red">*</span>
+                                    {!! Form::text('address[<% $index + 1 %>]',null,['class'=>'form-control']) !!}
 
-                    </div>
-                    <div class="form-group form-inline">
-                        {!! Form::label('Attach Document', 'Attach Document:') !!}
+                                </div>
+                                <div class="form-group form-inline">
+                                    {!! Form::label('Attach Document', 'Attach Document:') !!}
+                                    <span style="color:red">*</span>
+                                    {!! Form::select('document_type[<% $index + 1 %>]', ['' => 'Select', 'Company Employee ID Card'=>'Company Employee ID Card','Voter Photo ID'=>'Voter Photo ID','Driving License'=>'Driving License','Passport'=>'Passport'], null,['class'=>'form-control']) !!}
+                                    <label class="file" class="form-control">
+                                        <input type="file" name="doc[<% $index + 1 %>]" id="file">
+                                        <span class="file-custom"></span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    @endif
+                @else
+                    <div ng-repeat="n in [] | range:no_of_visitors">
+                         <hr>
+                        <div class="form-group form-inline">
+                            <% $index + 1 %>)
+
+                            {!! Form::label('Guest Name', 'Guest Name:') !!}
                             <span style="color:red">*</span>
-                            {!! Form::select('document_type[<% $index + 1 %>]', ['' => 'Select', 'Company Employee ID Card'=>'Company Employee ID Card','Voter Photo ID'=>'Voter Photo ID','Driving License'=>'Driving License','Passport'=>'Passport'], null,['class'=>'form-control']) !!}
-                            <label class="file" class="form-control">
-                                <input type="file" name="doc[<% $index + 1 %>]" id="file">
-                                <span class="file-custom"></span>
-                        </label>
+                            <span ng-if="type_of_guest == 'guestof'">
+                                {!! Form::text('name[<% $index + 1 %>]', ("Guest of ". $curruser->name),['class'=>'form-control guestofname']) !!}
+                            </span>
+                            <span ng-if="type_of_guest != 'guestof'">
+                                {!! Form::text('name[<% $index + 1 %>]', null,['class'=>'form-control guestofname']) !!}
+                            </span>
+
+
+                            {!! Form::label('Guest Contact No', 'Guest Contact No:') !!}
+                            <span style="color:red">*</span>
+                            {!! Form::text('contact_no[<% $index + 1 %>]',null,['class'=>'form-control']) !!}
+
+                            {!! Form::label('Guest Email', 'Guest Email:') !!}
+                            {!! Form::text('email[<% $index + 1 %>]',null,['class'=>'form-control']) !!}
+
+
+                            {!! Form::label('Guest Address', 'Guest Address:') !!}
+                            <span style="color:red">*</span>
+                            {!! Form::text('address[<% $index + 1 %>]',null,['class'=>'form-control']) !!}
+
+                        </div>
+                        <div class="form-group form-inline">
+                            {!! Form::label('Attach Document', 'Attach Document:') !!}
+                                <span style="color:red">*</span>
+                                {!! Form::select('document_type[<% $index + 1 %>]', ['' => 'Select', 'Company Employee ID Card'=>'Company Employee ID Card','Voter Photo ID'=>'Voter Photo ID','Driving License'=>'Driving License','Passport'=>'Passport'], null,['class'=>'form-control']) !!}
+                                <label class="file" class="form-control">
+                                    <input type="file" name="doc[<% $index + 1 %>]" id="file">
+                                    <span class="file-custom"></span>
+                            </label>
+                        </div>
                     </div>
-                </div>
+                @endif
+
+
                 <div class="form-group form-inline">
                     <div class="row">
                       <div class="col-md-4">

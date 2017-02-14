@@ -18,8 +18,8 @@
                 <div class="form-group  form-inline">
                     <div class="row">
                         <div class="col-md-3">
-                        {!! Form::label('Guest Name', 'Guest Name:') !!}
-                        {!! Form::select('guest_info_id',$users, $user_id,['class'=>'form-control']) !!}
+                        {!! Form::label('Guest Name', 'Guest Name:') !!} : {{$user->name}}
+                        {!! Form::hidden('guest_info_id',$user->id) !!}
                         </div>
                         <div class="col-md-3">
                         {!! Form::label('Food Name', 'Food Name:') !!}
@@ -59,8 +59,9 @@
                              <a href="{{route('foodserved.edit',$food->id)}}" class="btn btn-warning"><span aria-hidden="true" class="glyphicon glyphicon-pencil"></span></a>
                          </td>
                          <td>
-                         {!! Form::open(['method' => 'DELETE', 'route'=>['foodserved.destroy', $food->id]]) !!}                         
-                         <button class="btn btn-danger">
+                         {!! Form::open(['method' => 'DELETE', 'route'=>['foodserved.destroy', $food->id]]) !!}
+                         {!! Form::hidden('guest_info_id',$user->id) !!}
+                             <button class="btn btn-danger">
                              <span aria-hidden="true" class="glyphicon glyphicon-remove"></span>
                          </button>
                          {!! Form::close() !!}

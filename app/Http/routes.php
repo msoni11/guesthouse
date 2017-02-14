@@ -69,39 +69,50 @@ Route::group(['middleware' => ['web']], function () {
     
        
     Route::get('/guest_info/updatecheckin','GuestInfoController@updatecheckin')->name('updatecheckin');
-    
+
     Route::get('/guest_info/pending','GuestInfoController@Pending')->name('pending');
     
     Route::get('/guest_info/guest_house_bookings','GuestInfoController@GuestHouseBookings')->name('guest_house_bookings');
     
     Route::get('/guest_info/pendingcheckin','GuestInfoController@PendingCheckIn')->name('pendingcheckin');
-    
+
+    Route::get('/guest_info/pendingcheckin','GuestInfoController@PendingCheckIn')->name('pendingcheckin');
+
+    Route::get('/guest_info/updatebypasscheckout', 'GuestInfoController@UpdateBypassCheckout')->name('updatebypasscheckout');
+
     Route::resource('guest_info','GuestInfoController');
         
     Route::resource('guesthouse','GuestHouseController');
     
     Route::resource('room','RoomController');
+
+    Route::resource('extend_booking','ExtendController');
     
     Route::get('/guestroomallotment/checkout', 'GuestRoomAllotmentController@ShowCheckOut')->name('checkout');
-    
+
+    Route::get('/guestroomallotment/updatecheckout','GuestRoomAllotmentController@UpdateCheckOut')->name('updatecheckout');
+
+    Route::get('/guestroomallotment/approvebyemail', 'GuestRoomAllotmentController@ApproveByEmail')->name('ApproveByEmail');
+
+    Route::get('/guestroomallotment/show/{id}', 'GuestRoomAllotmentController@Show')->name('show');
+
     Route::resource('guestroomallotment','GuestRoomAllotmentController');
-    
+
     Route::resource('food','FoodController');
     
     Route::get('/foodserved/served', 'FoodServedController@Served')->name('served');
-    
+
     Route::resource('foodserved','FoodServedController');
     
     Route::resource('user','UsersController');
     
-   Route::get('/', 'UsersController@Home')->name('Home');
+    Route::get('/', 'UsersController@Home')->name('Home');
     
 });
 
 Route::group(['middleware' => ['web']], function () {
     Route::auth();
-    
-    
+
     Route::get('/booking_request/updatestatus/{booking_request}', 'BookingRequestController@UpdateStatusByHOD')->name('UpdateStatusByHOD');
     
     Route::get('/booking_request/updatebyowner/{booking_request}', 'BookingRequestController@UpdateStatusByOwner')->name('UpdateStatusByOwner');
@@ -117,11 +128,12 @@ Route::group(['middleware' => ['web']], function () {
     Route::get('/food_booking/foodpending','FoodBookingController@FoodPending')->name('foodpending');
 
     Route::get('/food_booking/food_bookings_report','FoodBookingController@FoodBookingsReport')->name('food_bookings_report');
-    
+
     Route::resource('booking_request','BookingRequestController');
-    
-   
-    
+
+    Route::resource('report','ReportController');
+
+
     //Route::get('/', function () {return view('auth.login'); });
    
     Route::post('/user/check_ldap', 'UsersController@CheckLdap')->name('check_ldap');

@@ -34,19 +34,23 @@
     <p><strong>Food Details:</strong></p>
     <table border="1" style='border-collapse: collapse'>
         <tr border="1" style='border-collapse: collapse'>
-            <th>Food Item</th><th>Quantity</th><th>Price</th>
+            <th>Food Item</th>
+            <th>Quantity</th>
+            {{--<th>Price</th>--}}
         </tr>
         @foreach($foods as $food)
             <tr border="1" style='border-collapse: collapse'>
-                <td>{{$food->name}}</td><td>{{$food->quantity}}</td><td>{{$food->price}}</td>
-                <div style="display:none"> {!! $total_price += ($food->quantity*$food->price) !!}</div>
+                <td>{{$food->name}}</td>
+                <td>{{$food->quantity}}</td>
+                {{--<td>{{$food->price}}</td>--}}
+                {{--<div style="display:none"> {!! $total_price += ($food->quantity*$food->price) !!}</div>--}}
             </tr>
         @endforeach
-         <tr>
-                    <td></td>
-                    <td><strong>Total</strong>(in Rs)</td>
-                    <td>{{$total_price}}</td>
-         </tr>
+         {{--<tr>--}}
+                    {{--<td></td>--}}
+                    {{--<td><strong>Total</strong>(in Rs)</td>--}}
+                    {{--<td>{{$total_price}}</td>--}}
+         {{--</tr>--}}
     </table>
      @endif
     <p>Thank You</p>

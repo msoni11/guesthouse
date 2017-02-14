@@ -6,7 +6,7 @@
             <div class="panel-heading panel-primary">Guest Check In & Out Detail</div>
             <div class="panel-body">
                 <form class="form-horizontal">
-                @foreach ($guestroomallotment as $guestroom)    
+                @foreach ($guestroomallotment as $guestroom)
                 <div class="form-group">
                     <label for="name" class="col-sm-2 control-label">Guest Name</label>
                     <div class="col-sm-10">
@@ -85,9 +85,6 @@
                 @if($guestroom->checked_in == 1)
                     <div class="col-md-6">
                         <div id="my_camera"></div>
-                        <form>
-                            <input type=button value="Take Guest Photo Snapshot" onClick="take_snapshot()">
-                        </form>
                     </div>
 
                 {!! Form::open(['method' => 'PATCH', 'route'=>['guestroomallotment.update', $guestroom->id]]) !!}
@@ -99,22 +96,31 @@
                     </div>
 
                     <div class="form-group">
-                        <div class="col-sm-offset-2 col-sm-10">
-                                {!! Form::hidden('set_date',1) !!}
-                                {!! Form::hidden('check_out_date',date('Y-m-d H:i:i:s')) !!}
-                                <input type="submit" class="btn btn-primary" value="Approve" />
-                        </div>
-                    </div>
-                {!! Form::close() !!}
-                @endif
-
-                    <div class="form-group">
-                        <div class="col-sm-offset-2 col-sm-10">
+                        <div class="col-sm-offset-2 col-sm-10 ">
                             <a href="{{ url('/guest_info/pending')}}" class="btn btn-primary">Back</a>
                         </div>
                     </div>
-                <hr>
-            </div>
+
+                    <div class="form-group">
+                        <div class="col-sm-offset-2 col-sm-10">
+                                {!! Form::hidden('set_date',1) !!}
+                                {!! Form::hidden('check_out_date',date('Y-m-d H:i:i:s')) !!}
+                                <input type="submit" class="btn btn-primary" value="Approve" onClick="take_snapshot()" />
+                        </div>
+                    </div>
+                {!! Form::close() !!}
+
+
+
+                {!! Form::open(['method' => 'GET', 'route'=>['ApproveByEmail']])  !!}
+                {!! Form::hidden('user_id',$guestroom->id) !!}
+                {!! Form::hidden('guest_info_id',$guest_info->id) !!}
+                <div class="col-sm-offset-2 col-sm-10">
+                    <input type="submit" class="btn btn-primary" value="Bypass" />
+                    {!! Form::close() !!}
+                    <hr>
+                </div>
+                @endif
             @if($guestroom->checked_in == 1)
             <script language="JavaScript">
                 Webcam.set({
