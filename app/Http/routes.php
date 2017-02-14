@@ -86,13 +86,17 @@ Route::group(['middleware' => ['web']], function () {
     
     Route::resource('room','RoomController');
 
+    Route::get('/extend_booking/approveextenddays','ExtendController@ApproveExtendDays')->name('approveextenddays');
+
+    Route::get('/extend_booking/cancelextenddays','ExtendController@CancelExtendDays')->name('cancelextenddays');
+
     Route::resource('extend_booking','ExtendController');
     
     Route::get('/guestroomallotment/checkout', 'GuestRoomAllotmentController@ShowCheckOut')->name('checkout');
 
     Route::get('/guestroomallotment/updatecheckout','GuestRoomAllotmentController@UpdateCheckOut')->name('updatecheckout');
 
-    Route::get('/guestroomallotment/approvebyemail', 'GuestRoomAllotmentController@ApproveByEmail')->name('ApproveByEmail');
+    Route::get('/guestroomallotment/approvebyemail', 'GuestRoomAllotmentController@ApproveByEmail')->name('approvebyemail');
 
     Route::get('/guestroomallotment/show/{id}', 'GuestRoomAllotmentController@Show')->name('show');
 
