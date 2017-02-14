@@ -47,9 +47,10 @@
                         <th>Food Item Name</th>
                         <th>Food Quantity</th>
                         <th>Food Price(per Unit)</th>
+                        @if($guestroom->checked_in == 1 || $guestroom->checked_in == 0)
                         <th colspan="2">Actions</th>
                     </tr>
-                    
+                     @endif
                 @foreach($foods as $food)
                 <tr>
                     <td>{{$food->name}}</td>
@@ -112,7 +113,7 @@
 
 
 
-                {!! Form::open(['method' => 'GET', 'route'=>['ApproveByEmail']])  !!}
+                {!! Form::open(['method' => 'GET', 'route'=>['approvebyemail']])  !!}
                 {!! Form::hidden('user_id',$guestroom->id) !!}
                 {!! Form::hidden('guest_info_id',$guest_info->id) !!}
                 <div class="col-sm-offset-2 col-sm-10">
