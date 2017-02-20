@@ -167,7 +167,6 @@ class GuestRoomAllotmentController extends Controller
                 ->where('guest_room_allotments.id', '=', $id)
                 ->select(DB::raw('guest_room_allotments.*, guest_infos.name, rooms.room_no, rooms.room_type'))
                 ->paginate(1);
-
             //dd($guestroomallotment[0]->guest_info_id);
             if (isset($guestroomallotment[0])) {
                 $foods = DB::table('food_serveds')
@@ -301,7 +300,7 @@ class GuestRoomAllotmentController extends Controller
                 $m->to($emails)->subject('Guest Check Out Details');
             });
         }
-        return redirect('/booking_request/');
+        return redirect('/guest_info/pending');
     }//function
     //---------------------------------------------------------------------------------------------------------------------
 
