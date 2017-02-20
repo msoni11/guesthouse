@@ -1,12 +1,16 @@
 <?php
 namespace GuestHouse\Http\Controllers;
+use GuestHouse\food_served;
 use GuestHouse\guest_info;
+use GuestHouse\guest_room_allotments;
 use Illuminate\Http\Request;
 use DB;
 use Illuminate\Support\Facades\Auth;
 use GuestHouse\Http\Requests;
 use GuestHouse\Http\Controllers\Controller;
 use Flash;
+use Illuminate\Support\Facades\App;
+use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Mail;
 use App\Http\Controllers\GuestRoomAllotmentController;
 
@@ -91,8 +95,9 @@ class GuestInfoController extends Controller
      *
      * @return Response
      */
-    public function GuestHouseBookings(request $request)
+    public function GuestHouseBookings(Request $request)
     {
+        //dd($request);die;
         if (Auth::check()) {
             $status = '';
             $from_date = date('Y/m/d 00:00:00', strtotime('-10 day'));
@@ -111,8 +116,10 @@ class GuestInfoController extends Controller
             }
             $search_form_data_arr = array('from_date' => $from_date, 'to_date' => $to_date, 'status' => $request->status);
             //$search_form_data_arr = $request->all();
+
             if (isset($request->status) && $request->status != '') {
                 $guest_info = DB::table('guest_infos')
+                    ->join('food_serveds', 'guest_infos.id', '=', 'food_serveds.guest_info_id')
                     ->join('booking_request_guest_infos', 'guest_infos.id', '=', 'booking_request_guest_infos.guest_info_id')
                     ->join('booking_requests', 'booking_request_guest_infos.booking_request_id', '=', 'booking_requests.id')
                     ->join('users', 'booking_requests.request_by', '=', 'users.id')
@@ -121,22 +128,28 @@ class GuestInfoController extends Controller
                     ->where('guest_room_allotments.check_in_date', '>', $from_date)
                     ->where('guest_room_allotments.check_in_date', '<', $to_date)
                     ->where('guest_room_allotments.checked_in', '=', $request->status)
-                    ->select(DB::raw('guest_infos.*,guest_room_allotments.checked_in, guest_room_allotments.check_in_date, guest_room_allotments.check_out_date, guest_room_allotments.id as guest_room_allotment_id, guest_room_allotments.checked_in, rooms.room_no, rooms.id as room_id, users.name as request_by'))
+                    ->select(DB::raw('guest_infos.*,food_serveds.price,guest_room_allotments.checked_in, guest_room_allotments.check_in_date, guest_room_allotments.check_out_date, guest_room_allotments.id as guest_room_allotment_id, guest_room_allotments.checked_in, rooms.room_no, rooms.id as room_id, users.name as request_by'))
                     ->orderby('guest_room_allotments.id', 'desc')
                     ->paginate(20);
             } else {
+
                 $guest_info = DB::table('guest_infos')
+                    ->join('food_serveds', 'guest_infos.id', '=', 'food_serveds.guest_info_id')
                     ->join('booking_request_guest_infos', 'guest_infos.id', '=', 'booking_request_guest_infos.guest_info_id')
                     ->join('booking_requests', 'booking_request_guest_infos.booking_request_id', '=', 'booking_requests.id')
                     ->join('users', 'booking_requests.request_by', '=', 'users.id')
                     ->join('guest_room_allotments', 'guest_room_allotments.guest_info_id', '=', 'guest_infos.id')
                     ->join('rooms', 'guest_room_allotments.room_id', '=', 'rooms.id')
+                    ->join('foods','food_serveds.food_id','=','foods.id')
                     ->where('guest_room_allotments.check_in_date', '>', $from_date)
                     ->where('guest_room_allotments.check_in_date', '<', $to_date)
+
                     ->where('guest_room_allotments.checked_in', '=', 2)
-                    ->select(DB::raw('guest_infos.*,guest_room_allotments.checked_in, guest_room_allotments.check_in_date, guest_room_allotments.check_out_date, guest_room_allotments.id as guest_room_allotment_id, guest_room_allotments.checked_in, rooms.room_no, rooms.id as room_id, users.name as request_by'))
+                    ->select(DB::raw('guest_infos.*,sum(food_serveds.quantity) as Quantity,sum(food_serveds.quantity * food_serveds.price) AS total_price,foods.name as item_name,food_serveds.food_id,guest_room_allotments.checked_in,guest_room_allotments.check_in_date, guest_room_allotments.check_out_date, guest_room_allotments.id as guest_room_allotment_id, guest_room_allotments.checked_in, rooms.room_no, rooms.id as room_id, users.name as request_by'))
                     ->orderby('guest_room_allotments.id', 'desc')
-                    ->paginate(20);
+                    ->groupby('guest_infos.id')
+                    ->paginate(10);
+
             }
             return view('guest_info.guest_house_bookings', compact('guest_info', 'search_form_data_arr'));
         } else {
@@ -412,24 +425,20 @@ class GuestInfoController extends Controller
 
     {
 
-            if (Auth::check())
-            {
+        if (Auth::check()) {
 
-                if ($request->status == 1)
-                {
-                    $update_guest_check_in = array('checked_in' => 2, 'check_out_date' => date('Y-m-d H:i:s'));
-                    $guest_room_allotment = \GuestHouse\guest_room_allotments::find($request->id);
-                    $res = $guest_room_allotment->update($update_guest_check_in);
-                    $this->checkoutbypassmail($request);
-                }
-                else if($request->status == 0)
-                {
-                    $this->checkoutcancelbypassmail($request);
-                }
-
+            if ($request->status == 1) {
+                $update_guest_check_in = array('checked_in' => 2, 'check_out_date' => date('Y-m-d H:i:s'));
+                $guest_room_allotment = \GuestHouse\guest_room_allotments::find($request->id);
+                $res = $guest_room_allotment->update($update_guest_check_in);
+                $this->checkoutbypassmail($request);
+            } else if ($request->status == 0) {
+                $this->checkoutcancelbypassmail($request);
             }
 
-    return redirect ('/login');
+        }
+
+        return redirect('/login');
     }
 
     public function checkoutbypassmail($request)
@@ -452,8 +461,7 @@ class GuestInfoController extends Controller
             ->select(DB::raw('users.*'))->first();
 
         $emails = [$reception->email];
-        $mail = Mail::send('emails.reception_final_email', ['receptionist' => $reception , 'status'=>$request->status], function ($m) use ($emails)
-        {
+        $mail = Mail::send('emails.reception_final_email', ['receptionist' => $reception, 'status' => $request->status], function ($m) use ($emails) {
             $m->from('support@hzl.com', 'GHMS Team');
             $m->to($emails)->subject('Guest Check Out Details');
         });
@@ -473,8 +481,7 @@ class GuestInfoController extends Controller
             ->select(DB::raw('users.*'))->first();
 
         $emails = [$reception->email];
-        $mail = Mail::send('emails.reception_final_email', ['receptionist' => $reception , 'status'=>$request->status], function ($m) use ($emails)
-        {
+        $mail = Mail::send('emails.reception_final_email', ['receptionist' => $reception, 'status' => $request->status], function ($m) use ($emails) {
             $m->from('support@hzl.com', 'GHMS Team');
             $m->to($emails)->subject('Guest Check Out Details');
 
@@ -482,4 +489,41 @@ class GuestInfoController extends Controller
 
     }
 
+    public function export(Request $request)
+    {
+
+
+        Excel::create('guestinformation', function($excel)
+        {
+
+            $guest_info = DB::table('guest_infos')
+                ->join('food_serveds', 'guest_infos.id', '=', 'food_serveds.guest_info_id')
+                ->join('booking_request_guest_infos', 'guest_infos.id', '=', 'booking_request_guest_infos.guest_info_id')
+                ->join('booking_requests', 'booking_request_guest_infos.booking_request_id', '=', 'booking_requests.id')
+                ->join('users', 'booking_requests.request_by', '=', 'users.id')
+                ->join('guest_room_allotments', 'guest_room_allotments.guest_info_id', '=', 'guest_infos.id')
+                ->join('rooms', 'guest_room_allotments.room_id', '=', 'rooms.id')
+                ->join('foods','food_serveds.food_id','=','foods.id')
+                ->where('guest_room_allotments.checked_in', '=', 2)
+                ->select(DB::raw('guest_infos.*,sum(food_serveds.quantity) as Quantity,sum(food_serveds.quantity * food_serveds.price) AS total_price,foods.name as item_name,guest_room_allotments.checked_in,guest_room_allotments.check_in_date, guest_room_allotments.check_out_date, guest_room_allotments.id as guest_room_allotment_id, guest_room_allotments.checked_in, rooms.room_no, rooms.id as room_id, users.name as request_by'))
+                ->orderby('guest_room_allotments.id', 'desc')
+                ->groupby('guest_infos.id')
+                ->paginate(20);
+            //dd($guest_info);die;
+            $array = json_decode(json_encode($guest_info), true);
+
+            foreach($array as $key => $value) {
+                $result[$key] = $value;
+                $array = $result[$key];
+            }
+
+            $excel->sheet('guest_house_bookings', function($sheet)use ($array)
+            {
+                $sheet->setOrientation('landscape');
+                $sheet->fromArray($array);
+
+            });
+
+        })->export('xls');
+    }
 }

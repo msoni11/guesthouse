@@ -28,8 +28,10 @@
                            {!! Form::submit('Reset', ['class'=>'form-control bt btn-primary', 'name'=>'reset'])!!}
                            
                            <a href="{{url('/guest_info/pending')}}" class="btn btn-success">All Records</a>
+                            <a href="{{url('/guest_info/export') }}" class="btn btn-success">Download</a>
                        </div>
                        {!! Form::close() !!}
+
                     </div>
                    </div>       
                 
@@ -49,6 +51,9 @@
                      <th>Check In Date</th>
                      <th>Check Out Date</th>
                      <th>Total Bill Amount(in Rs)</th>
+                     <th>Item Name</th>
+                     <th>quantity</th>
+
                  </tr>
                  </thead>
                  <tbody>
@@ -85,11 +90,12 @@
                              @endif
                          </td>
                          <td>{{ $guest->request_by }}</td>
-                         
                          <td>{{ $guest->check_in_date }}</td>
                          <td>{{ $guest->check_out_date }}</td>
-                         
-                         <td></td>
+                         <td>{{ $guest->total_price }}</td>
+                         <td>{{ $guest->item_name }}</td>
+                         <td>{{ $guest->Quantity }}</td>
+
                      </tr>
                  @endforeach
 
