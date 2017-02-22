@@ -108,7 +108,7 @@ class FoodServedController extends Controller
      * @param type $id
      */
     public function update(Request $request, $id){
-
+//dd($request);die;
         $all_data = $request->all();
         $foodserved = \GuestHouse\food_served::find($id);
         $foodserved->update($all_data);
@@ -118,7 +118,7 @@ class FoodServedController extends Controller
         if ($request->guestroomallotmentid) {
             return redirect('/guestroomallotment/'. $request->guestroomallotmentid);
         }
-        return redirect('foodserved');
+        return redirect('/foodserved/create?user_id='.$request->guest_info_id);
     }
     
     /**
